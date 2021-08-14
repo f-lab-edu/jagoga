@@ -1,22 +1,29 @@
-package com.project.jagoga.domain.user.application;
+package com.project.jagoga.user.application.impl;
 
-import com.project.jagoga.domain.user.dao.UserRepository;
-import com.project.jagoga.domain.user.dto.UserCreateRequestDto;
-import com.project.jagoga.domain.user.dto.UserResponse;
+import com.project.jagoga.exception.user.DuplicatedUserException;
 import com.project.jagoga.user.application.UserService;
+import com.project.jagoga.user.domain.PasswordEncoder;
+import com.project.jagoga.user.domain.User;
+import com.project.jagoga.user.domain.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserResponse signUp(UserCreateRequestDto userCreateRequestDto) {
-        return userRepository.save(userCreateRequestDto.toEntity());
+    public User signUp(User user) {
+        if(userRepository.existsByEmail(user.getEmail())) {
+            throw new DuplicatedUserException();
+        }
+        user.setPassword(passwordEncoder.encrypt(user.getPassword()));
+        return userRepository.save(user);
     }
 }

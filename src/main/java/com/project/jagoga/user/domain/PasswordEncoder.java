@@ -1,6 +1,6 @@
 package com.project.jagoga.user.domain;
 
-public interface Encoder {
+public interface PasswordEncoder {
 
     public String encrypt(String password);
 

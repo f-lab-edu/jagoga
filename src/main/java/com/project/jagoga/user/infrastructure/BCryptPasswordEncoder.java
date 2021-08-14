@@ -1,11 +1,11 @@
 package com.project.jagoga.user.infrastructure;
 
-import com.project.jagoga.user.domain.Encoder;
+import com.project.jagoga.user.domain.PasswordEncoder;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BCryptEncoder implements Encoder {
+public class BCryptPasswordEncoder implements PasswordEncoder {
 
     @Override
     public String encrypt(String password) {

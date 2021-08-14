@@ -1,9 +1,8 @@
-package com.project.jagoga.domain.user.application;
+package com.project.jagoga.user.application;
 
-import com.project.jagoga.domain.user.dto.UserCreateRequestDto;
-import com.project.jagoga.domain.user.dto.UserResponse;
+import com.project.jagoga.user.domain.User;
 
-public interface UserUseCase {
+public interface UserService {
 
-    public UserResponse signUp(UserCreateRequestDto userCreateRequestDto);
+    public User signUp(User user);
 }

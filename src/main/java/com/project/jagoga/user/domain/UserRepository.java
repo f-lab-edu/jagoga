@@ -1,8 +1,8 @@
-package com.project.jagoga.domain.user.dao;
-
-import com.project.jagoga.user.domain.User;
+package com.project.jagoga.user.domain;
 
 public interface UserRepository {
 
     public User save(User user);
+
+    public boolean existsByEmail(String email);
 }
