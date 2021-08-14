@@ -7,6 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Optional;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -17,7 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<String> handleBusinessException(BusinessException exception) {
-        return ResponseEntity.status(exception.getStatusCode()).body(exception.getMessage());
+        return ResponseEntity.of(Optional.of(exception.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
