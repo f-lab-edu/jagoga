@@ -1,4 +1,4 @@
-package com.project.jagoga.global.error;
+package com.project.jagoga.exception.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
