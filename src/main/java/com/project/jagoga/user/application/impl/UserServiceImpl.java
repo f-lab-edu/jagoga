@@ -20,10 +20,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User signUp(User user) {
+        validateDuplicatedUser(user);
+        user.setPassword(passwordEncoder.encrypt(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    private void validateDuplicatedUser(User user) {
         if(userRepository.existsByEmail(user.getEmail())) {
             throw new DuplicatedUserException();
         }
-        user.setPassword(passwordEncoder.encrypt(user.getPassword()));
-        return userRepository.save(user);
     }
 }
