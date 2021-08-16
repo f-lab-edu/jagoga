@@ -24,7 +24,9 @@ public class MemoryUserRepository implements UserRepository {
     public boolean existsByEmail(String email) {
         for (Long key : userMap.keySet()) {
             User user = userMap.get(key);
-            if(user.getEmail().equals(email)) return true;
+            if(user.getEmail().equals(email)) {
+                return true;
+            }
         }
         return false;
     }
