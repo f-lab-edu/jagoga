@@ -38,7 +38,7 @@ public class User {
         this.id = id;
     }
 
-    public void setPassword(String password) {
+    public void setEncodedPassword(String password) {
         this.password = password;
     }
 

@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User signUp(User user) {
         validateDuplicatedUser(user);
-        user.setPassword(passwordEncoder.encrypt(user.getPassword()));
+        user.setEncodedPassword(passwordEncoder.encrypt(user.getPassword()));
         return userRepository.save(user);
     }
 
