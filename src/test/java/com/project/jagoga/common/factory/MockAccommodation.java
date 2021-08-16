@@ -1,36 +1,33 @@
 package com.project.jagoga.common.factory;
 
-import com.project.jagoga.products.domain.Address;
-import com.project.jagoga.products.domain.Product;
-import com.project.jagoga.products.domain.ProductType;
-import com.project.jagoga.products.domain.grade.Grade;
+import com.project.jagoga.accommodation.domain.Address;
+import com.project.jagoga.accommodation.domain.Accommodation;
+import com.project.jagoga.accommodation.domain.AccommodationType;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public class MockProduct {
+public class MockAccommodation {
 
-    private Long productId;
-    private String productName;
+    private Long accommodationId;
+    private String accommodationName;
     private String phoneNumber;
     private Address address;
-    private ProductType productType;
-    private Grade grade;
+    private AccommodationType accommodationType;
     private String description;
     private String information;
     private int lowPrice;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
 
-    public Product build() {
-        return new Product(
-                productId,
-                productName,
+    public Accommodation build() {
+        return new Accommodation(
+                accommodationId,
+                accommodationName,
                 phoneNumber,
                 address,
-                productType,
-                grade,
+                accommodationType,
                 description,
                 information,
                 lowPrice,
