@@ -2,7 +2,7 @@ package com.project.jagoga.user.domain;
 
 import org.springframework.util.Assert;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class User {
 
@@ -11,8 +11,8 @@ public class User {
     private String name;
     private String password;
     private String phone;
-    private Timestamp createdAt;
-    private Timestamp UpdatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
