@@ -2,6 +2,7 @@ package com.project.jagoga.user.infrastructure;
 
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +25,7 @@ public class MemoryUserRepository implements UserRepository {
     public boolean existsByEmail(String email) {
         for (Long key : userMap.keySet()) {
             User user = userMap.get(key);
-            if(user.getEmail().equals(email)) {
+            if(StringUtils.equals(user.getEmail(), email)) {
                 return true;
             }
         }
