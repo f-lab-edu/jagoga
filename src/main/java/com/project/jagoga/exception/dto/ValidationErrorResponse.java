@@ -11,16 +11,16 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-public class ErrorResponse {
+public class ValidationErrorResponse {
 
     private List<ErrorField> errors;
 
-    public ErrorResponse(List<ErrorField> errors) {
+    public ValidationErrorResponse(List<ErrorField> errors) {
         this.errors = errors;
     }
 
-    public static ErrorResponse of(BindingResult bindingResult) {
-        return new ErrorResponse(ErrorField.of(bindingResult));
+    public static ValidationErrorResponse of(BindingResult bindingResult) {
+        return new ValidationErrorResponse(ErrorField.of(bindingResult));
     }
 
     @Getter
