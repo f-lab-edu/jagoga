@@ -19,8 +19,8 @@ public class ValidationErrorResponse {
         this.errors = errors;
     }
 
-    public static ValidationErrorResponse of(BindingResult bindingResult) {
-        return new ValidationErrorResponse(ErrorField.of(bindingResult));
+    public static ValidationErrorResponse from(BindingResult bindingResult) {
+        return new ValidationErrorResponse(ErrorField.from(bindingResult));
     }
 
     @Getter
@@ -31,7 +31,7 @@ public class ValidationErrorResponse {
         private String value;
         private String reason;
 
-        public static List<ErrorField> of(BindingResult bindingResult) {
+        public static List<ErrorField> from(BindingResult bindingResult) {
             List<ErrorField> errorFields = bindingResult.getAllErrors().stream().map(error ->
                     new ErrorField(((FieldError) error).getField(), String.valueOf(((FieldError) error).getRejectedValue()),
                             ((FieldError) error).getDefaultMessage())).collect(Collectors.toList());
