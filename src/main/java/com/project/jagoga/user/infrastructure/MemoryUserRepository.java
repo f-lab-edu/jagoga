@@ -5,16 +5,17 @@ import com.project.jagoga.user.domain.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class MemoryUserRepository implements UserRepository {
 
     private static ConcurrentHashMap<Long, User> userMap = new ConcurrentHashMap<>();
-    private static long sequence = 0L;
+    private static AtomicLong sequence = new AtomicLong(); // 초기값이 0인 AtomicLong을 생성
 
     @Override
     public User save(User user) {
-        user.setId(++sequence);
+        user.setId(sequence.incrementAndGet());
         userMap.put(user.getId(), user);
         return user;
     }
