@@ -4,20 +4,14 @@ import com.project.jagoga.exception.user.DuplicatedUserException;
 import com.project.jagoga.user.domain.PasswordEncoder;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
+import com.project.jagoga.user.infrastructure.BCryptPasswordEncoder;
+import com.project.jagoga.user.infrastructure.MemoryUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
     User user;
@@ -35,37 +29,27 @@ class UserServiceImplTest {
         user = User.createInstance(email, name, password, phone);
     }
 
-    @Mock
-    UserRepository userRepository;
+    UserRepository userRepository = new MemoryUserRepository();
 
-    @Mock
-    PasswordEncoder passwordEncoder;
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @InjectMocks
-    UserServiceImpl userService;
+    UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder);
 
     @Test
     @DisplayName("정상 회원가입 테스트")
     public void signUp() {
-        // given
-        when(userRepository.existsByEmail(user.getEmail())).thenReturn(false);
-        when(passwordEncoder.encrypt(user.getPassword())).thenReturn("encodedPassword");
-
         // when
         userService.signUp(user);
 
         // then
-        verify(userRepository).existsByEmail(user.getEmail());
-        verify(passwordEncoder).encrypt(password);
-        verify(userRepository).save(user);
-        assertEquals(user.getPassword(), "encodedPassword");
+        assertNotEquals(password, user.getPassword());
     }
 
     @Test
     @DisplayName("중복 회원가입 테스트")
     public void duplicateUsersignUp() {
         // given
-        when(userRepository.existsByEmail(user.getEmail())).thenReturn(true);
+        userService.signUp(user);
 
         // when
         Exception exception = assertThrows(DuplicatedUserException.class, () -> userService.signUp(user));
