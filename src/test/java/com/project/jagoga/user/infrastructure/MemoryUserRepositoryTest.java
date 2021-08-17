@@ -38,5 +38,7 @@ class MemoryUserRepositoryTest {
         // then
         assertThat(user.getId()).isGreaterThan(0);
         assertTrue(userRepository.existsByEmail(user.getEmail()));
+
+        userRepository.deleteAll();
     }
 }

@@ -43,6 +43,8 @@ class UserServiceImplTest {
 
         // then
         assertNotEquals(password, user.getPassword());
+
+        userRepository.deleteAll();
     }
 
     @Test
@@ -56,5 +58,7 @@ class UserServiceImplTest {
 
         // then
         assertEquals("이미 존재하는 회원입니다", exception.getMessage());
+
+        userRepository.deleteAll();
     }
 }

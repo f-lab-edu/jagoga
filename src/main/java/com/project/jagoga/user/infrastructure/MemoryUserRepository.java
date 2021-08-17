@@ -31,4 +31,9 @@ public class MemoryUserRepository implements UserRepository {
         }
         return false;
     }
+
+    @Override
+    public void deleteAll() {
+        userMap.clear();
+    }
 }

@@ -5,4 +5,6 @@ public interface UserRepository {
     public User save(User user);
 
     public boolean existsByEmail(String email);
+
+    public void deleteAll();
 }
