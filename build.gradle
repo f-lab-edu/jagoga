@@ -19,6 +19,8 @@ dependencies {
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+  testCompileOnly 'org.projectlombok:lombok'
+  testAnnotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
