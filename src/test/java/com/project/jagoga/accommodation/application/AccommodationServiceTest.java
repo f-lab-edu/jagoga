@@ -32,7 +32,7 @@ class AccommodationServiceTest {
     void saveAccommodation_Success() {
         // given
         Accommodation accommodation = AccommodationFactory.accommodation();
-        when(accommodationRepository.save(any())).thenReturn(PRODUCT_ID);
+        when(accommodationRepository.save(any())).thenReturn(accommodation);
 
         // when
         Long accommodationId = accommodationService.saveAccommodation(accommodation);

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface AccommodationRepository {
 
-    Long save(Accommodation accommodation);
+    Accommodation save(Accommodation accommodation);
 
     Long delete(Long accommodationId);
 

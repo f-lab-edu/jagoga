@@ -19,10 +19,10 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
     private static AtomicLong sequence = new AtomicLong();
 
     @Override
-    public Long save(Accommodation accommodation) {
+    public Accommodation save(Accommodation accommodation) {
         accommodation.setAccommodationId(sequence.incrementAndGet());
         accommodationStore.put(accommodation.getAccommodationId(), accommodation);
-        return accommodation.getAccommodationId();
+        return accommodation;
     }
 
     @Override

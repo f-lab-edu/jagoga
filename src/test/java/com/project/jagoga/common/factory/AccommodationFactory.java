@@ -14,7 +14,7 @@ public class AccommodationFactory {
     }
 
     public static Accommodation accommodation() {
-        return createAccommodation(null, "testAccommodation");
+        return createAccommodation(1L, "testAccommodation");
     }
 
     public static Accommodation createAccommodation(Long accommodationId, String accommodationName) {

@@ -17,7 +17,7 @@ public class AccommodationService {
 
     public Long saveAccommodation(Accommodation accommodation) {
         validateDuplicatedAccommodation(accommodation);
-        return accommodationRepository.save(accommodation);
+        return accommodationRepository.save(accommodation).getAccommodationId();
     }
 
     public Long deleteAccommodation(Long AccommodationId) {
