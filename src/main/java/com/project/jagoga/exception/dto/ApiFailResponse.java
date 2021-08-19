@@ -1,5 +1,6 @@
 package com.project.jagoga.exception.dto;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,17 +11,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@NoArgsConstructor
-public class ValidationErrorResponse {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class ApiFailResponse {
 
-    private List<ErrorField> errors;
+    private final String status = "fail";
+    private List<ErrorField> data;
 
-    public ValidationErrorResponse(List<ErrorField> errors) {
-        this.errors = errors;
+    private ApiFailResponse(List<ErrorField> errors) {
+        this.data = errors;
     }
 
-    public static ValidationErrorResponse from(BindingResult bindingResult) {
-        return new ValidationErrorResponse(ErrorField.from(bindingResult));
+    public static ApiFailResponse createInstance(BindingResult bindingResult) {
+        return new ApiFailResponse(ErrorField.createInstance(bindingResult));
     }
 
     @Getter
@@ -28,12 +30,11 @@ public class ValidationErrorResponse {
     @NoArgsConstructor
     public static class ErrorField {
         private String field;
-        private String value;
         private String reason;
 
-        public static List<ErrorField> from(BindingResult bindingResult) {
+        public static List<ErrorField> createInstance(BindingResult bindingResult) {
             List<ErrorField> errorFields = bindingResult.getAllErrors().stream().map(error ->
-                    new ErrorField(((FieldError) error).getField(), String.valueOf(((FieldError) error).getRejectedValue()),
+                    new ErrorField(((FieldError) error).getField(),
                             ((FieldError) error).getDefaultMessage())).collect(Collectors.toList());
             return errorFields;
         }
