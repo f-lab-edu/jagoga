@@ -19,9 +19,11 @@ dependencies {
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-  testCompileOnly 'org.projectlombok:lombok'
-  testAnnotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
+	implementation 'javax.xml.bind:jaxb-api:2.1'
 }
 
 test {
