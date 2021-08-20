@@ -26,6 +26,12 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
     }
 
     @Override
+    public Accommodation update(Accommodation accommodation) {
+        accommodationStore.put(accommodation.getAccommodationId(), accommodation);
+        return accommodation;
+    }
+
+    @Override
     public Long delete(Long accommodationId) {
         return accommodationStore.remove(accommodationId).getAccommodationId();
     }
@@ -45,5 +51,10 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
         return accommodationStore.values().stream()
                 .filter(accommodation -> StringUtils.equals(accommodation.getAccommodationName(), accommodationName))
                 .findAny();
+    }
+
+    @Override
+    public void deleteAll() {
+        accommodationStore.clear();
     }
 }

@@ -43,4 +43,18 @@ public class Accommodation {
     public void setAccommodationId(Long accommodationId) {
         this.accommodationId = accommodationId;
     }
+
+    public Accommodation update(String accommodationName, String phoneNumber,
+                       Address address, AccommodationType accommodationType,
+                       String description, String information) {
+        return Accommodation.builder()
+                .accommodationId(this.getAccommodationId())
+                .accommodationName(accommodationName)
+                .phoneNumber(phoneNumber)
+                .address(address)
+                .accommodationType(accommodationType)
+                .description(description)
+                .information(information)
+                .build();
+    }
 }
