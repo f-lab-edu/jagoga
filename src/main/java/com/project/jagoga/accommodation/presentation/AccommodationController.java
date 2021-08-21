@@ -32,7 +32,7 @@ public class AccommodationController {
 
     @PutMapping("/{accommodationId}")
     public ResponseEntity<AccommodationResponseDto> updateAccommodation(
-            @PathVariable Long accommodationId,
+            @PathVariable long accommodationId,
             @RequestBody AccommodationRequestDto accommodationRequestDto) {
         AccommodationResponseDto accommodationResponseDto = accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
         return ResponseEntity
@@ -41,7 +41,7 @@ public class AccommodationController {
     }
 
     @DeleteMapping("/{accommodationId}")
-    public ResponseEntity<Void> deleteAccommodation(@PathVariable Long accommodationId) {
+    public ResponseEntity<Void> deleteAccommodation(@PathVariable long accommodationId) {
         accommodationService.deleteAccommodation(accommodationId);
         return ResponseEntity.noContent().build();
     }
