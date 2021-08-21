@@ -22,22 +22,34 @@ public class AccommodationController {
     private final AccommodationService accommodationService;
 
     @PostMapping
-    public ResponseEntity<Void> createAccommodation(@RequestBody final AccommodationRequestDto accommodationRequestDto) {
+    public ResponseEntity<Void> createAccommodation(
+            @RequestBody final AccommodationRequestDto accommodationRequestDto) {
         Long accommodationId = accommodationService.saveAccommodation(accommodationRequestDto.toEntity());
         return ResponseEntity
                 .created(URI.create(PRODUCT_API_URI + "/" + accommodationId))
                 .build();
     }
 
+    @PutMapping("/{accommodationId}")
+    public ResponseEntity<AccommodationResponseDto> updateAccommodation(
+            @PathVariable long accommodationId,
+            @RequestBody AccommodationRequestDto accommodationRequestDto) {
+        AccommodationResponseDto accommodationResponseDto = accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
+        return ResponseEntity
+                .created(URI.create(PRODUCT_API_URI + "/" + accommodationId))
+                .body(accommodationResponseDto);
+    }
+
     @DeleteMapping("/{accommodationId}")
-    public ResponseEntity<Void> deleteAccommodation(@PathVariable Long accommodationId) {
+    public ResponseEntity<Void> deleteAccommodation(@PathVariable long accommodationId) {
         accommodationService.deleteAccommodation(accommodationId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
     public ResponseEntity<List<AccommodationResponseDto>> getAccommodationAllList() {
-        List<AccommodationResponseDto> accommodationAllList = AccommodationResponseDto.listOf(accommodationService.getAccommodationAllList());
+        List<AccommodationResponseDto> accommodationAllList
+                = AccommodationResponseDto.listOf(accommodationService.getAccommodationAllList());
         return ResponseEntity.ok(accommodationAllList);
     }
 }

@@ -7,6 +7,8 @@ public interface AccommodationRepository {
 
     Accommodation save(Accommodation accommodation);
 
+    Accommodation update(Accommodation accommodation);
+
     Long delete(Long accommodationId);
 
     List<Accommodation> findAll();
@@ -14,4 +16,6 @@ public interface AccommodationRepository {
     Optional<Accommodation> findById(Long accommodationId);
 
     Optional<Accommodation> findByName(String accommodationName);
+
+    void deleteAll();
 }
