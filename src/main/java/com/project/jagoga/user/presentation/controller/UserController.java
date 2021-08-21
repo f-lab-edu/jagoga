@@ -5,6 +5,7 @@ import com.project.jagoga.user.domain.Authentication;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
+import com.project.jagoga.user.presentation.dto.response.JwtResponseDto;
 import com.project.jagoga.user.presentation.dto.response.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody final LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public JwtResponseDto login(@RequestBody final LoginRequestDto loginRequestDto) {
         String token = authentication.login(loginRequestDto);
-        response.setHeader("jwt-auth-token", token);
+        return JwtResponseDto.createInstance(token);
     }
 }
