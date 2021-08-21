@@ -6,6 +6,8 @@ import com.project.jagoga.exception.user.NotFoundUserException;
 import com.project.jagoga.exception.user.UserAuthenticationFailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,14 +19,23 @@ public class UserExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.createError(exception.getMessage()));
     }
 
-    // TODO : Json 응답 포맷 통일하기
     @ExceptionHandler(NotFoundUserException.class)
-    public ResponseEntity<String> handleNotFoundUserException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleNotFoundUserException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.createError(exception.getMessage()));
     }
 
     @ExceptionHandler(UserAuthenticationFailException.class)
-    public ResponseEntity<String> handleUserAuthenticationFailException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+    public ResponseEntity<ApiResponse<?>> handleUserAuthenticationFailException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createError(exception.getMessage()));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createError(exception.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handleValidationExceptions(BindingResult bindingResult) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createFail(bindingResult));
     }
 }

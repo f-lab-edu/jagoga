@@ -1,5 +1,6 @@
 package com.project.jagoga.user.presentation.controller;
 
+import com.project.jagoga.exception.dto.ApiResponse;
 import com.project.jagoga.user.application.UserService;
 import com.project.jagoga.user.domain.Authentication;
 import com.project.jagoga.user.domain.User;
@@ -11,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -23,14 +22,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDto signUp(@RequestBody final UserCreateRequestDto userCreateRequestDto) {
+    public ApiResponse<UserResponseDto> signUp(@RequestBody final UserCreateRequestDto userCreateRequestDto) {
         User user = userService.signUp(userCreateRequestDto.toEntity());
-        return UserResponseDto.createInstance(user);
+        return ApiResponse.createSuccess(UserResponseDto.createInstance(user));
     }
 
     @PostMapping("/login")
-    public JwtResponseDto login(@RequestBody final LoginRequestDto loginRequestDto) {
+    public ApiResponse<JwtResponseDto> login(@RequestBody final LoginRequestDto loginRequestDto) {
         String token = authentication.login(loginRequestDto);
-        return JwtResponseDto.createInstance(token);
+        return ApiResponse.createSuccess(JwtResponseDto.createInstance(token));
     }
 }
