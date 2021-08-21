@@ -7,9 +7,10 @@ import com.project.jagoga.user.domain.PasswordEncoder;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
