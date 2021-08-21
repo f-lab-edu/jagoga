@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class AccommodationService {
 
     public AccommodationResponseDto updateAccommodation(Long accommodationId, AccommodationRequestDto accommodationRequestDto) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
-                .orElseThrow(() -> new NotExistAccommodationException());
+                .orElseThrow(NotExistAccommodationException::new);
 
         Accommodation updatedAccommodation = accommodation.update(
                 accommodationRequestDto.getAccommodationName(),
