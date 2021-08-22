@@ -29,7 +29,8 @@ public class JwtTokenAuthentication implements Authentication {
 
     @Override
     public String login(LoginRequestDto loginRequestDto) {
-        User foundUser = userRepository.getByEmail(loginRequestDto.getEmail()).orElseThrow(NotFoundUserException::new);
+        User foundUser = userRepository.getByEmail(loginRequestDto.getEmail())
+                .orElseThrow(NotFoundUserException::new);
 
         if (!passwordEncoder.isMatch(loginRequestDto.getPassword(), foundUser.getPassword())) {
             throw new UserAuthenticationFailException();
