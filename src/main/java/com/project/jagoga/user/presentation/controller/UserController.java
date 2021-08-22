@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -31,5 +33,11 @@ public class UserController {
     public ApiResponse<JwtResponseDto> login(@RequestBody final LoginRequestDto loginRequestDto) {
         String token = authentication.login(loginRequestDto);
         return ApiResponse.createSuccess(JwtResponseDto.createInstance(token));
+    }
+
+    @PostMapping("/login")
+    public JwtResponseDto login(@RequestBody final LoginRequestDto loginRequestDto) {
+        String token = authentication.login(loginRequestDto);
+        return JwtResponseDto.createInstance(token);
     }
 }
