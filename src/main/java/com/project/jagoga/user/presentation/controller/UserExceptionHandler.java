@@ -38,15 +38,4 @@ public class UserExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleValidationExceptions(BindingResult bindingResult) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createFail(bindingResult));
     }
-
-    // TODO : Json 응답 포맷 통일하기
-    @ExceptionHandler(NotFoundUserException.class)
-    public ResponseEntity<String> handleNotFoundUserException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-    }
-
-    @ExceptionHandler(UserAuthenticationFailException.class)
-    public ResponseEntity<String> handleUserAuthenticationFailException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
 }

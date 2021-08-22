@@ -34,10 +34,4 @@ public class UserController {
         String token = authentication.login(loginRequestDto);
         return ApiResponse.createSuccess(JwtResponseDto.createInstance(token));
     }
-
-    @PostMapping("/login")
-    public JwtResponseDto login(@RequestBody final LoginRequestDto loginRequestDto) {
-        String token = authentication.login(loginRequestDto);
-        return JwtResponseDto.createInstance(token);
-    }
 }
