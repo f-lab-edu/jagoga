@@ -19,13 +19,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
 public class JwtTokenAuthentication implements Authentication {
 
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    private final String SECRET_KEY;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public JwtTokenAuthentication(@Value("${jwt.secret}") String SECRET_KEY, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.SECRET_KEY = SECRET_KEY;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public String login(LoginRequestDto loginRequestDto) {
