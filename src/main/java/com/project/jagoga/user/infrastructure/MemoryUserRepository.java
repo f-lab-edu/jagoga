@@ -5,6 +5,7 @@ import com.project.jagoga.user.domain.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,6 +20,11 @@ public class MemoryUserRepository implements UserRepository {
         user.setId(sequence.incrementAndGet());
         userMap.put(user.getId(), user);
         return user;
+    }
+
+    @Override
+    public Optional<User> getByEmail(String email) {
+        return userMap.values().stream().filter(user -> StringUtils.equals(user.getEmail(), email)).findAny();
     }
 
     @Override
