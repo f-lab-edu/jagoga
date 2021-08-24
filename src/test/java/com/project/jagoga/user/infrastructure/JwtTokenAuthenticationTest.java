@@ -57,4 +57,16 @@ class JwtTokenAuthenticationTest {
         // then
         assertEquals("인증되지 않은 사용자입니다", exception.getMessage());
     }
+
+    @Test
+    @DisplayName("null 토큰에 대한 검증시 예외발생")
+    public void verifyNullToken() {
+        // when
+        String nullToken = null;
+        Exception exception = assertThrows(UnAuthorizedException.class,
+                () -> jwtTokenAuthentication.verifyLogin(nullToken));
+
+        // then
+        assertEquals("인증되지 않은 사용자입니다", exception.getMessage());
+    }
 }
