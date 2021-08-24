@@ -22,9 +22,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (((HandlerMethod) handler).getMethodAnnotation(LoginCheck.class) == null) {
             return true;
         }
+        verifyLogin(request);
 
+        return true;
+    }
+
+    private void verifyLogin(HttpServletRequest request) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         authentication.verifyLogin(token);
-        return true;
     }
 }
