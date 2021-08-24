@@ -1,4 +1,4 @@
-package com.project.jagoga.accommodation.presentation;
+package com.project.jagoga.accommodation.presentation.controller;
 
 import com.project.jagoga.accommodation.application.AccommodationService;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static com.project.jagoga.accommodation.presentation.AccommodationController.*;
+import static com.project.jagoga.accommodation.presentation.controller.AccommodationController.*;
 
 @RestController
 @RequiredArgsConstructor
