@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@PropertySource("classpath:application-dev.properties")
 class UserControllerTest {
 
     @Autowired
