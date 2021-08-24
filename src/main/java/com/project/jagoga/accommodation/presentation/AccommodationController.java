@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class AccommodationController {
 
     @PostMapping
     public ResponseEntity<Void> createAccommodation(
-            @RequestBody final AccommodationRequestDto accommodationRequestDto) {
+            @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto) {
         Long accommodationId = accommodationService.saveAccommodation(accommodationRequestDto.toEntity());
         return ResponseEntity
                 .created(URI.create(PRODUCT_API_URI + "/" + accommodationId))
@@ -33,7 +34,7 @@ public class AccommodationController {
     @PutMapping("/{accommodationId}")
     public ResponseEntity<AccommodationResponseDto> updateAccommodation(
             @PathVariable long accommodationId,
-            @RequestBody AccommodationRequestDto accommodationRequestDto) {
+            @Valid @RequestBody AccommodationRequestDto accommodationRequestDto) {
         AccommodationResponseDto accommodationResponseDto = accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
         return ResponseEntity
                 .created(URI.create(PRODUCT_API_URI + "/" + accommodationId))
