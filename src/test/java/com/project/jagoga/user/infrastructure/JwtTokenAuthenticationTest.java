@@ -28,7 +28,7 @@ class JwtTokenAuthenticationTest {
 
     @BeforeEach
     public void init() {
-        email = "test1223@test";
+        email = "verifyNormalToken@test";
         name = "testname";
         password = "testpassword";
         phone = "testphone";
