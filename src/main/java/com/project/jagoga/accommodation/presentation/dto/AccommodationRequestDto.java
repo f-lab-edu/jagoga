@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Getter
@@ -19,13 +20,13 @@ public class AccommodationRequestDto {
     private String accommodationName;
 
     @NotBlank(message = "형식이 맞지 않습니다")
-    @Pattern(regexp = "\\\\d{3}-\\\\d{4}-\\\\d{4}")
+    @Pattern(regexp = "\\d{3}-\\d{4}-\\d{4}")
     private String phoneNumber;
 
 //    @NotBlank(message = "주소가 빈 칸일 수 없습니다.")
     private Address address;
 
-    @NotBlank(message = "숙소 타입을 선택해주세요.")
+    @NotNull(message = "숙소 타입을 선택해주세요.")
     private AccommodationType accommodationType;
 
     private String description;

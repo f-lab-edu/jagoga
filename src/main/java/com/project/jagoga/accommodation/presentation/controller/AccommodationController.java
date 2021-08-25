@@ -15,10 +15,10 @@ import static com.project.jagoga.accommodation.presentation.controller.Accommoda
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(PRODUCT_API_URI)
+@RequestMapping(ACCOMMODATION_API_URI)
 public class AccommodationController {
 
-    public static final String PRODUCT_API_URI = "/api/accommodation";
+    public static final String ACCOMMODATION_API_URI = "/api/accommodation";
 
     private final AccommodationService accommodationService;
 
@@ -27,7 +27,7 @@ public class AccommodationController {
             @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto) {
         Long accommodationId = accommodationService.saveAccommodation(accommodationRequestDto.toEntity());
         return ResponseEntity
-                .created(URI.create(PRODUCT_API_URI + "/" + accommodationId))
+                .created(URI.create(ACCOMMODATION_API_URI + "/" + accommodationId))
                 .build();
     }
 
@@ -37,7 +37,7 @@ public class AccommodationController {
             @Valid @RequestBody AccommodationRequestDto accommodationRequestDto) {
         AccommodationResponseDto accommodationResponseDto = accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
         return ResponseEntity
-                .created(URI.create(PRODUCT_API_URI + "/" + accommodationId))
+                .created(URI.create(ACCOMMODATION_API_URI + "/" + accommodationId))
                 .body(accommodationResponseDto);
     }
 
