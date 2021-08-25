@@ -21,7 +21,7 @@ public class AccommodationFactory {
         return createAccommodation("test",
                 "010-27270-4682",
                 null,
-                AccommodationType.HOTEL,
+                AccommodationType.PENSION,
                 "description test",
                 "information test");
     }
