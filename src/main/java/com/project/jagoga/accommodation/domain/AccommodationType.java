@@ -3,22 +3,16 @@ package com.project.jagoga.accommodation.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.project.jagoga.exception.accommodation.NotFoundAccommodationTypeException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.stream.Stream;
 
 public enum AccommodationType {
     PENSION;
 
-    public static Map<String, AccommodationType> map = new HashMap<>();
-    static {
-        map.put(PENSION.name(), PENSION);
-    }
-
     @JsonCreator
-    public static AccommodationType getType(String typeName) {
-        if (map.get(typeName) == null) {
-            throw new NotFoundAccommodationTypeException();
-        }
-        return map.get(typeName);
+    public static AccommodationType forValue(String accommodationValue) {
+        return Stream.of(AccommodationType.values())
+                .filter(value -> value.name().equals(accommodationValue.toUpperCase()))
+                .findFirst()
+                .orElseThrow(NotFoundAccommodationTypeException::new);
     }
 }
