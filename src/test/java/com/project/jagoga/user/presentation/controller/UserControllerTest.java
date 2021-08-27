@@ -2,7 +2,6 @@ package com.project.jagoga.user.presentation.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.jagoga.user.application.impl.UserServiceImpl;
-import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import org.hamcrest.Matchers;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -46,7 +44,7 @@ class UserControllerTest {
         email = "test1223@test";
         name = "testname";
         password = "testpassword";
-        phone = "testphone";
+        phone = "010-1234-1234";
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
     }
 

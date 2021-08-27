@@ -31,7 +31,7 @@ class JwtTokenAuthenticationTest {
         email = "verifyNormalToken@test";
         name = "testname";
         password = "testpassword";
-        phone = "testphone";
+        phone = "010-1234-1234";
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
     }
 
