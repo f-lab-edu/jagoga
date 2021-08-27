@@ -5,6 +5,7 @@ import com.project.jagoga.user.application.UserService;
 import com.project.jagoga.user.domain.PasswordEncoder;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
+import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,14 +20,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User signUp(User user) {
+    public User signUp(UserCreateRequestDto userCreateRequestDto) {
+        User user = userCreateRequestDto.toEntity();
         validateDuplicatedUser(user);
         user.setEncodedPassword(passwordEncoder.encrypt(user.getPassword()));
         return userRepository.save(user);
     }
 
     private void validateDuplicatedUser(User user) {
-        if(userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new DuplicatedUserException();
         }
     }

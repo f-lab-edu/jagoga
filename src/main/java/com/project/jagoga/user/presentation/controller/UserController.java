@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<UserResponseDto> signUp(@RequestBody final UserCreateRequestDto userCreateRequestDto) {
-        User user = userService.signUp(userCreateRequestDto.toEntity());
+        User user = userService.signUp(userCreateRequestDto);
         return ApiResponse.createSuccess(UserResponseDto.createInstance(user));
     }
 

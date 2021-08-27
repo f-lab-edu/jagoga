@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.jagoga.user.application.impl.UserServiceImpl;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
+import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,11 +35,11 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    User user;
     String email;
     String name;
     String phone;
     String password;
+    UserCreateRequestDto userCreateRequestDto;
 
     @BeforeEach
     public void setUp() {
@@ -46,14 +47,14 @@ class UserControllerTest {
         name = "testname";
         password = "testpassword";
         phone = "testphone";
-        user = User.createInstance(email, name, password, phone);
+        userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
     }
 
     @Test
     @DisplayName("사용자 로그인 테스트")
     public void login() throws Exception {
         // given
-        userService.signUp(user);
+        userService.signUp(userCreateRequestDto);
 
         LoginRequestDto loginRequestDto = new LoginRequestDto(email, password);
         String loginJson = objectMapper.writeValueAsString(loginRequestDto);
