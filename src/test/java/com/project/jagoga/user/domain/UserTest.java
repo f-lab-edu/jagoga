@@ -23,7 +23,7 @@ class UserTest {
         void setup() {
             email = "test@email.com";
             name = "testname";
-            password = "testpassword";
+            password = "@Aabcdef";
             phone = "010-1234-1234";
         }
 

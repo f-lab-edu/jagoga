@@ -30,7 +30,7 @@ class UserServiceImplTest {
     public void setUp() {
         email = "test1223@test";
         name = "testname";
-        password = "testpassword";
+        password = "@Aabcdef";
         phone = "010-1234-1234";
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
     }
