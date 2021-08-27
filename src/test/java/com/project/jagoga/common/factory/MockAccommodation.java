@@ -1,8 +1,8 @@
 package com.project.jagoga.common.factory;
 
-import com.project.jagoga.accommodation.domain.Address;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
+import com.project.jagoga.accommodation.domain.address.City;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ public class MockAccommodation {
     private Long accommodationId;
     private String accommodationName;
     private String phoneNumber;
-    private Address address;
+    private City city;
     private AccommodationType accommodationType;
     private String description;
     private String information;
@@ -26,7 +26,7 @@ public class MockAccommodation {
                 accommodationId,
                 accommodationName,
                 phoneNumber,
-                address,
+                city,
                 accommodationType,
                 description,
                 information,
