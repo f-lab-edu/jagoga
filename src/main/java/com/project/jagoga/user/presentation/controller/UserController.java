@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -22,13 +24,13 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<UserResponseDto> signUp(@RequestBody final UserCreateRequestDto userCreateRequestDto) {
+    public ApiResponse<UserResponseDto> signUp(@Valid @RequestBody final UserCreateRequestDto userCreateRequestDto) {
         User user = userService.signUp(userCreateRequestDto);
         return ApiResponse.createSuccess(UserResponseDto.createInstance(user));
     }
 
     @PostMapping("/login")
-    public ApiResponse<JwtResponseDto> login(@RequestBody final LoginRequestDto loginRequestDto) {
+    public ApiResponse<JwtResponseDto> login(@Valid @RequestBody final LoginRequestDto loginRequestDto) {
         String token = authentication.login(loginRequestDto);
         return ApiResponse.createSuccess(JwtResponseDto.createInstance(token));
     }
