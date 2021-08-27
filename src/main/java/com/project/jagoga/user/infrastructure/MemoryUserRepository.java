@@ -23,6 +23,17 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public User update(User user) {
+        userMap.put(user.getId(), user);
+        return user;
+    }
+
+    @Override
+    public Optional<User> findById(Long userId) {
+        return Optional.ofNullable(userMap.get(userId));
+    }
+
+    @Override
     public Optional<User> getByEmail(String email) {
         return userMap.values().stream().filter(user -> StringUtils.equals(user.getEmail(), email)).findAny();
     }
@@ -31,7 +42,7 @@ public class MemoryUserRepository implements UserRepository {
     public boolean existsByEmail(String email) {
         for (Long key : userMap.keySet()) {
             User user = userMap.get(key);
-            if(StringUtils.equals(user.getEmail(), email)) {
+            if (StringUtils.equals(user.getEmail(), email)) {
                 return true;
             }
         }

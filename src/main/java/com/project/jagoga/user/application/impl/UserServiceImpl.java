@@ -1,11 +1,13 @@
 package com.project.jagoga.user.application.impl;
 
 import com.project.jagoga.exception.user.DuplicatedUserException;
+import com.project.jagoga.exception.user.NotFoundUserException;
 import com.project.jagoga.user.application.UserService;
 import com.project.jagoga.user.domain.PasswordEncoder;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
+import com.project.jagoga.user.presentation.dto.request.UserUpdateRequestDto;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +27,15 @@ public class UserServiceImpl implements UserService {
         validateDuplicatedUser(user);
         user.setEncodedPassword(passwordEncoder.encrypt(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    @Override
+    public User updateUser(long id, UserUpdateRequestDto userUpdateRequestDto) {
+        User user = userRepository.findById(id).orElseThrow(NotFoundUserException::new);
+        User updateUser = user.updateUser(userUpdateRequestDto.getName(),
+                passwordEncoder.encrypt(userUpdateRequestDto.getPassword()),
+                userUpdateRequestDto.getPhone());
+        return userRepository.update(updateUser);
     }
 
     private void validateDuplicatedUser(User user) {

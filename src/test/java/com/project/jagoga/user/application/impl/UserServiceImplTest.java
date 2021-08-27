@@ -7,6 +7,7 @@ import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.infrastructure.BCryptPasswordEncoder;
 import com.project.jagoga.user.infrastructure.MemoryUserRepository;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
+import com.project.jagoga.user.presentation.dto.request.UserUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,6 @@ class UserServiceImplTest {
 
     @Test
     @DisplayName("정상 회원가입 테스트")
-
     public void signUp() {
         // when
         User user = userService.signUp(userCreateRequestDto);
@@ -58,6 +58,25 @@ class UserServiceImplTest {
 
         // then
         assertEquals("이미 존재하는 회원입니다", exception.getMessage());
+
+        userRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("정상 회원정보 수정 테스트")
+    public void updateUser() {
+        // given
+        User user = userService.signUp(userCreateRequestDto);
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updatename", "updatepw", "010-4321-4321");
+
+        // when
+        User updateUser = userService.updateUser(user.getId(), userUpdateRequestDto);
+
+        // then
+        assertEquals(user.getEmail(), updateUser.getEmail());
+        assertNotEquals(user.getName(), updateUser.getName());
+        assertNotEquals(user.getPassword(), updateUser.getPassword());
+        assertNotEquals(user.getPhone(), updateUser.getPhone());
 
         userRepository.deleteAll();
     }
