@@ -2,6 +2,7 @@ package com.project.jagoga.accommodation.infrastructure;
 
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationRepository;
+import com.project.jagoga.accommodation.domain.address.City;
 import org.springframework.stereotype.Repository;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,7 +33,7 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
     }
 
     @Override
-    public Long delete(Long accommodationId) {
+    public Long delete(long accommodationId) {
         return accommodationStore.remove(accommodationId).getAccommodationId();
     }
 
@@ -42,7 +43,7 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
     }
 
     @Override
-    public Optional<Accommodation> findById(Long accommodationId) {
+    public Optional<Accommodation> findById(long accommodationId) {
         return Optional.ofNullable(accommodationStore.get(accommodationId));
     }
 
@@ -56,5 +57,13 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
     @Override
     public void deleteAll() {
         accommodationStore.clear();
+    }
+
+    @Override
+    public List<Accommodation> findByCategoryId(long categoryId) {
+        /**
+         * TODO: category Id를 통해 city->accommodation 조회
+         */
+        return null;
     }
 }

@@ -47,8 +47,8 @@ public class AccommodationController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<AccommodationResponseDto>> getAccommodationAllList() {
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<AccommodationResponseDto>> getAccommodationListByCategory(@PathVariable long categoryId) {
         List<AccommodationResponseDto> accommodationAllList
                 = AccommodationResponseDto.listOf(accommodationService.getAccommodationAllList());
         return ResponseEntity.ok(accommodationAllList);
