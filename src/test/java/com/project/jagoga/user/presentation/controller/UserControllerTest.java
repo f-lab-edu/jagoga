@@ -56,7 +56,7 @@ class UserControllerTest {
     public void setUp() {
         email = "test1223@test";
         name = "testname";
-        password = "@Aabcdef";
+        password = "aAabcdef@";
         phone = "010-1234-1234";
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
         loginRequestDto = new LoginRequestDto(email, password);
@@ -87,7 +87,7 @@ class UserControllerTest {
         User user = userService.signUp(userCreateRequestDto);
         String token = authentication.login(loginRequestDto);
 
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updateName", "updatePw", "010-4321-4321");
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updateName", "@abcdefAd", "010-4321-4321");
         String updateUserJson = objectMapper.writeValueAsString(userUpdateRequestDto);
 
         // when then
@@ -105,7 +105,7 @@ class UserControllerTest {
         // given
         User user = userService.signUp(userCreateRequestDto);
 
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updateName", "updatePw", "010-4321-4321");
+        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updateName", "@abcdefdAS", "010-4321-4321");
         String updateUserJson = objectMapper.writeValueAsString(userUpdateRequestDto);
 
         // when then
