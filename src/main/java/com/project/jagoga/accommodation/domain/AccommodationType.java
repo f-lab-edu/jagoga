@@ -13,6 +13,6 @@ public enum AccommodationType {
         return Stream.of(AccommodationType.values())
                 .filter(value -> value.name().equals(accommodationValue.toUpperCase()))
                 .findFirst()
-                .orElseThrow(NotFoundAccommodationTypeException::new);
+                .orElseThrow(UnknownAccommodationTypeException::new);
     }
 }

@@ -22,21 +22,21 @@ public class AccommodationService {
         return accommodationRepository.save(accommodation).getAccommodationId();
     }
 
-    public AccommodationResponseDto updateAccommodation(Long accommodationId, AccommodationRequestDto accommodationRequestDto) {
+    public AccommodationResponseDto updateAccommodation(long accommodationId, AccommodationRequestDto accommodationRequestDto) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
                 .orElseThrow(NotExistAccommodationException::new);
 
         Accommodation updatedAccommodation = accommodation.update(
                 accommodationRequestDto.getAccommodationName(),
                 accommodationRequestDto.getPhoneNumber(),
-                accommodationRequestDto.getAddress(),
+                accommodationRequestDto.getCity(),
                 accommodationRequestDto.getAccommodationType(),
                 accommodationRequestDto.getAccommodationName(),
                 accommodationRequestDto.getInformation());
         return AccommodationResponseDto.of(accommodationRepository.update(updatedAccommodation));
     }
 
-    public Long deleteAccommodation(Long AccommodationId) {
+    public Long deleteAccommodation(long AccommodationId) {
         accommodationRepository.findById(AccommodationId)
                 .ifPresentOrElse(
                         a -> accommodationRepository.delete(AccommodationId),
@@ -46,13 +46,17 @@ public class AccommodationService {
         return AccommodationId;
     }
 
-    public Accommodation getAccommodation(Long accommodationId) {
+    public Accommodation getAccommodation(long accommodationId) {
         return accommodationRepository.findById(accommodationId)
                 .orElseThrow(NotExistAccommodationException::new);
     }
 
     public List<Accommodation> getAccommodationAllList() {
         return accommodationRepository.findAll();
+    }
+
+    public List<Accommodation> getAccommodationListByCategoryId(long categoryId) {
+        return accommodationRepository.findByCategoryId(categoryId);
     }
 
     private void validateDuplicatedAccommodation(Accommodation accommodation) {

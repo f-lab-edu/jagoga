@@ -2,8 +2,7 @@ package com.project.jagoga.common.factory;
 
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
-import com.project.jagoga.accommodation.domain.AccommodationType;
-import com.project.jagoga.accommodation.domain.Address;
+import com.project.jagoga.accommodation.domain.address.City;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import lombok.Builder;
 
@@ -41,7 +40,7 @@ public class AccommodationFactory {
 
     public static AccommodationRequestDto createAccommodation(String accommodationName,
                                                                   String phoneNumber,
-                                                                  Address address,
+                                                                  City city,
                                                                   AccommodationType accommodationType,
                                                                   String description,
                                                                   String information) {

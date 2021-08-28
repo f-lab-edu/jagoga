@@ -1,5 +1,7 @@
 package com.project.jagoga.accommodation.domain;
 
+import com.project.jagoga.accommodation.domain.address.City;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,13 +11,15 @@ public interface AccommodationRepository {
 
     Accommodation update(Accommodation accommodation);
 
-    Long delete(Long accommodationId);
+    Long delete(long accommodationId);
 
     List<Accommodation> findAll();
 
-    Optional<Accommodation> findById(Long accommodationId);
+    Optional<Accommodation> findById(long accommodationId);
 
     Optional<Accommodation> findByName(String accommodationName);
 
     void deleteAll();
+
+    List<Accommodation> findByCategoryId(long accommodationId);
 }

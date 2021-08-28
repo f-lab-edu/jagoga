@@ -1,8 +1,8 @@
 package com.project.jagoga.accommodation.presentation.dto;
 
-import com.project.jagoga.accommodation.domain.Address;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
+import com.project.jagoga.accommodation.domain.address.City;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -23,8 +23,8 @@ public class AccommodationRequestDto {
     @Pattern(regexp = "\\d{3}-\\d{4}-\\d{4}")
     private String phoneNumber;
 
-//    @NotBlank(message = "주소가 빈 칸일 수 없습니다.")
-    private Address address;
+    @NotBlank(message = "주소가 빈 칸일 수 없습니다.")
+    private City city;
 
     @NotNull(message = "숙소 타입을 선택해주세요.")
     private AccommodationType accommodationType;
@@ -36,11 +36,11 @@ public class AccommodationRequestDto {
     }
 
     public AccommodationRequestDto(String accommodationName, String phoneNumber,
-                                   Address address, AccommodationType accommodationType,
+                                   City city, AccommodationType accommodationType,
                                    String description, String information) {
         this.accommodationName = accommodationName;
         this.phoneNumber = phoneNumber;
-        this.address = address;
+        this.city = city;
         this.accommodationType = accommodationType;
         this.description = description;
         this.information = information;
@@ -50,7 +50,7 @@ public class AccommodationRequestDto {
         return Accommodation.builder()
                 .accommodationName(accommodationName)
                 .phoneNumber(phoneNumber)
-                .address(address)
+                .city(city)
                 .accommodationType(accommodationType)
                 .description(description)
                 .information(information)

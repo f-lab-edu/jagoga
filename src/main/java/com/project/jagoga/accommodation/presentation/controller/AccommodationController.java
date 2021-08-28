@@ -35,7 +35,8 @@ public class AccommodationController {
     public ResponseEntity<AccommodationResponseDto> updateAccommodation(
             @PathVariable long accommodationId,
             @Valid @RequestBody AccommodationRequestDto accommodationRequestDto) {
-        AccommodationResponseDto accommodationResponseDto = accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
+        AccommodationResponseDto accommodationResponseDto
+                = accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
         return ResponseEntity
                 .created(URI.create(ACCOMMODATION_API_URI + "/" + accommodationId))
                 .body(accommodationResponseDto);
@@ -47,10 +48,10 @@ public class AccommodationController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<AccommodationResponseDto>> getAccommodationAllList() {
-        List<AccommodationResponseDto> accommodationAllList
-                = AccommodationResponseDto.listOf(accommodationService.getAccommodationAllList());
-        return ResponseEntity.ok(accommodationAllList);
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<AccommodationResponseDto>> getAccommodationListByCategory(@PathVariable long categoryId) {
+        List<AccommodationResponseDto> accommodationListByCategoryId
+                = AccommodationResponseDto.listOf(accommodationService.getAccommodationListByCategoryId(categoryId));
+        return ResponseEntity.ok(accommodationListByCategoryId);
     }
 }

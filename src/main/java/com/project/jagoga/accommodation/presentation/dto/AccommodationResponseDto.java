@@ -1,8 +1,8 @@
 package com.project.jagoga.accommodation.presentation.dto;
 
-import com.project.jagoga.accommodation.domain.Address;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
+import com.project.jagoga.accommodation.domain.address.City;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,17 +15,17 @@ import static java.util.stream.Collectors.*;
 public class AccommodationResponseDto {
 
     private String accommodationName;
-    private Address address;
+    private City city;
     private AccommodationType accommodationType;
     private int lowPrice;
 
     private AccommodationResponseDto() {
     }
 
-    public AccommodationResponseDto(String accommodationName, Address address,
+    public AccommodationResponseDto(String accommodationName, City city,
                                     AccommodationType accommodationType, int lowPrice) {
         this.accommodationName = accommodationName;
-        this.address = address;
+        this.city = city;
         this.accommodationType = accommodationType;
         this.lowPrice = lowPrice;
     }
@@ -33,7 +33,7 @@ public class AccommodationResponseDto {
     public static AccommodationResponseDto of(Accommodation accommodation) {
         return AccommodationResponseDto.builder()
                 .accommodationName(accommodation.getAccommodationName())
-                .address(accommodation.getAddress())
+                .city(accommodation.getCity())
                 .accommodationType(accommodation.getAccommodationType())
                 .lowPrice(accommodation.getLowPrice())
                 .build();
