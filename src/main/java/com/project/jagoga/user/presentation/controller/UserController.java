@@ -2,9 +2,7 @@ package com.project.jagoga.user.presentation.controller;
 
 import com.project.jagoga.exception.dto.ApiResponse;
 import com.project.jagoga.user.application.UserService;
-import com.project.jagoga.user.domain.Authentication;
-import com.project.jagoga.user.domain.LoginCheck;
-import com.project.jagoga.user.domain.User;
+import com.project.jagoga.user.domain.*;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserUpdateRequestDto;
@@ -39,7 +37,9 @@ public class UserController {
 
     @LoginCheck
     @PutMapping("/{id}")
-    public ApiResponse<UserResponseDto> updateUser(@PathVariable("id") final long id, @Valid @RequestBody final UserUpdateRequestDto userUpdateRequestDto) {
+    public ApiResponse<UserResponseDto> updateUser(@PathVariable("id") final long id,
+                                                   @Valid @RequestBody final UserUpdateRequestDto userUpdateRequestDto,
+                                                   @RequireLoginUser AuthUser loginUser) {
         User user = userService.updateUser(id, userUpdateRequestDto);
         return ApiResponse.createSuccess(UserResponseDto.createInstance(user));
     }

@@ -20,6 +20,6 @@ public class UserResponseDto {
         this.email = email;
         this.name = name;
         this.phone = phone;
-        this.role = role.getValue();
+        this.role = role.getTitle();
     }
 }

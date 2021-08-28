@@ -4,18 +4,17 @@ import com.project.jagoga.exception.user.ExpiredTokenException;
 import com.project.jagoga.exception.user.NotFoundUserException;
 import com.project.jagoga.exception.user.UnAuthorizedException;
 import com.project.jagoga.exception.user.UserAuthenticationFailException;
-import com.project.jagoga.user.domain.Authentication;
-import com.project.jagoga.user.domain.PasswordEncoder;
-import com.project.jagoga.user.domain.User;
-import com.project.jagoga.user.domain.UserRepository;
+import com.project.jagoga.user.domain.*;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class JwtTokenAuthentication implements Authentication {
@@ -42,6 +41,25 @@ public class JwtTokenAuthentication implements Authentication {
         return createToken(foundUser);
     }
 
+    @Override
+    public Optional<AuthUser> getLoginUser(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY.getBytes())
+                    .parseClaimsJws(token); // 토큰 파싱 및 검증 진행, 실패 시 에러
+            // TODO TEST
+            Long id = claims.getBody().get("id", Long.class);
+            String email = claims.getBody().get("email", String.class);
+            String roleValue = claims.getBody().get("role", String.class);
+            Role role = Role.valueOf(roleValue);
+            return Optional.of(AuthUser.createInstance(id, email, role));
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredTokenException();
+        } catch (Exception e) {
+            throw new UnAuthorizedException();
+        }
+    }
+
     public void verifyLogin(String token) {
         try {
             Jws<Claims> claims = Jwts.parser()
@@ -62,6 +80,7 @@ public class JwtTokenAuthentication implements Authentication {
 
         // Payload
         Map<String, Object> payloads = new HashMap<>();
+        payloads.put("id", user.getId());
         payloads.put("email", user.getEmail());
         payloads.put("role", user.getRole());
 
