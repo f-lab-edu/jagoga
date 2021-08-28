@@ -63,6 +63,7 @@ public class JwtTokenAuthentication implements Authentication {
         // Payload
         Map<String, Object> payloads = new HashMap<>();
         payloads.put("email", user.getEmail());
+        payloads.put("role", user.getRole());
 
         // 만료기간 30분
         Date expireTime = new Date();
