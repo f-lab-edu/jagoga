@@ -1,7 +1,7 @@
 package com.project.jagoga.accommodation.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.project.jagoga.exception.accommodation.NotFoundAccommodationTypeException;
+import com.project.jagoga.exception.accommodation.UnknownAccommodationTypeException;
 
 import java.util.stream.Stream;
 
