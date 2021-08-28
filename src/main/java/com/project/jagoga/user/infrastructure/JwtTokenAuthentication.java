@@ -10,7 +10,6 @@ import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +46,6 @@ public class JwtTokenAuthentication implements Authentication {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY.getBytes())
                     .parseClaimsJws(token); // 토큰 파싱 및 검증 진행, 실패 시 에러
-            // TODO TEST
             Long id = claims.getBody().get("id", Long.class);
             String email = claims.getBody().get("email", String.class);
             String roleValue = claims.getBody().get("role", String.class);
