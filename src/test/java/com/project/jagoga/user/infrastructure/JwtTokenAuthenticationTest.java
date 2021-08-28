@@ -3,9 +3,9 @@ package com.project.jagoga.user.infrastructure;
 import com.project.jagoga.exception.user.UnAuthorizedException;
 import com.project.jagoga.user.application.impl.UserServiceImpl;
 import com.project.jagoga.user.domain.PasswordEncoder;
-import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
+import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,26 +20,26 @@ class JwtTokenAuthenticationTest {
     UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder);
     JwtTokenAuthentication jwtTokenAuthentication = new JwtTokenAuthentication("testSecretKey", userRepository, passwordEncoder);
 
-    User user;
     String email;
     String name;
     String phone;
     String password;
+    UserCreateRequestDto userCreateRequestDto;
 
     @BeforeEach
     public void init() {
         email = "verifyNormalToken@test";
         name = "testname";
-        password = "testpassword";
-        phone = "testphone";
-        user = User.createInstance(email, name, password, phone);
+        password = "@Aabcdef";
+        phone = "010-1234-1234";
+        userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
     }
 
     @Test
     @DisplayName("로그인 이후에 발행 된 정상토큰에 대한 검증")
     public void verifyNormalToken() {
         // when
-        userService.signUp(user);
+        userService.signUp(userCreateRequestDto);
         String normalToken = jwtTokenAuthentication.login(new LoginRequestDto(email, password));
 
         // then

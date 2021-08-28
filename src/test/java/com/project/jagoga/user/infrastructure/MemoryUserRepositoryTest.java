@@ -7,10 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MemoryUserRepositoryTest {
+
+    UserRepository userRepository = new MemoryUserRepository();
 
     User user;
     String email;
@@ -22,12 +23,10 @@ class MemoryUserRepositoryTest {
     public void setUp() {
         email = "test1223@test";
         name = "testname";
-        password = "testpassword";
-        phone = "testphone";
+        password = "@Aabcdef";
+        phone = "010-1234-1234";
         user = User.createInstance(email, name, password, phone);
     }
-
-    UserRepository userRepository = new MemoryUserRepository();
 
     @Test
     @DisplayName("사용자를 저장한다.")
