@@ -40,7 +40,7 @@ public class UserController {
     public ApiResponse<UserResponseDto> updateUser(@PathVariable("id") final long id,
                                                    @Valid @RequestBody final UserUpdateRequestDto userUpdateRequestDto,
                                                    @RequireLoginUser AuthUser loginUser) {
-        User user = userService.updateUser(id, userUpdateRequestDto);
+        User user = userService.updateUser(id, userUpdateRequestDto, loginUser);
         return ApiResponse.createSuccess(UserResponseDto.createInstance(user));
     }
 }
