@@ -2,6 +2,7 @@ package com.project.jagoga.user.application.impl;
 
 import com.project.jagoga.exception.user.DuplicatedUserException;
 import com.project.jagoga.user.domain.PasswordEncoder;
+import com.project.jagoga.user.domain.Role;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.infrastructure.BCryptPasswordEncoder;
@@ -43,6 +44,7 @@ class UserServiceImplTest {
 
         // then
         assertNotEquals(password, user.getPassword());
+        assertEquals(Role.BASIC, user.getRole());
 
         userRepository.deleteAll();
     }
@@ -74,6 +76,7 @@ class UserServiceImplTest {
 
         // then
         assertEquals(user.getEmail(), updateUser.getEmail());
+        assertEquals(user.getRole(), updateUser.getRole());
         assertNotEquals(user.getName(), updateUser.getName());
         assertNotEquals(user.getPassword(), updateUser.getPassword());
         assertNotEquals(user.getPhone(), updateUser.getPhone());
