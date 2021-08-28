@@ -55,6 +55,10 @@ public class AccommodationService {
         return accommodationRepository.findAll();
     }
 
+    public List<Accommodation> getAccommodationListByCategoryId(long categoryId) {
+        return accommodationRepository.findByCategoryId(categoryId);
+    }
+
     private void validateDuplicatedAccommodation(Accommodation accommodation) {
         accommodationRepository.findByName(accommodation.getAccommodationName())
                 .ifPresent(a -> {
