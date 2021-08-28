@@ -1,5 +1,6 @@
 package com.project.jagoga.user.infrastructure;
 
+import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -23,19 +24,25 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     @Override
+    public User update(User user) {
+        userMap.put(user.getId(), user);
+        return user;
+    }
+
+    @Override
+    public Optional<User> findById(Long userId) {
+        return Optional.ofNullable(userMap.get(userId));
+    }
+
+    @Override
     public Optional<User> getByEmail(String email) {
         return userMap.values().stream().filter(user -> StringUtils.equals(user.getEmail(), email)).findAny();
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        for (Long key : userMap.keySet()) {
-            User user = userMap.get(key);
-            if(StringUtils.equals(user.getEmail(), email)) {
-                return true;
-            }
-        }
-        return false;
+        return userMap.values().stream()
+                .anyMatch(user -> StringUtils.equals(user.getEmail(), email));
     }
 
     @Override

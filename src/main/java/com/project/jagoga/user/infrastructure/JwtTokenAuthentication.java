@@ -1,16 +1,15 @@
 package com.project.jagoga.user.infrastructure;
 
+import com.project.jagoga.exception.user.ExpiredTokenException;
 import com.project.jagoga.exception.user.NotFoundUserException;
+import com.project.jagoga.exception.user.UnAuthorizedException;
 import com.project.jagoga.exception.user.UserAuthenticationFailException;
 import com.project.jagoga.user.domain.Authentication;
 import com.project.jagoga.user.domain.PasswordEncoder;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +18,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
 public class JwtTokenAuthentication implements Authentication {
 
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    private final String SECRET_KEY;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public JwtTokenAuthentication(@Value("${jwt.secret}") String SECRET_KEY, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.SECRET_KEY = SECRET_KEY;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public String login(LoginRequestDto loginRequestDto) {
@@ -37,6 +40,18 @@ public class JwtTokenAuthentication implements Authentication {
         }
 
         return createToken(foundUser);
+    }
+
+    public void verifyLogin(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY.getBytes())
+                    .parseClaimsJws(token); // 토큰 파싱 및 검증 진행, 실패 시 에러
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredTokenException();
+        } catch (Exception e) {
+            throw new UnAuthorizedException();
+        }
     }
 
     private String createToken(User user) {

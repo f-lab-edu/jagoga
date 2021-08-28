@@ -1,9 +1,11 @@
 package com.project.jagoga.user.domain;
 
+import lombok.Getter;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class User {
 
     private Long id;
@@ -14,32 +16,16 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
     public void setEncodedPassword(String password) {
         this.password = password;
+    }
+
+    public User updateUser(String name, String password, String phone) {
+        return new User(this.id, this.email, name, password, phone);
     }
 
     public static User createInstance(String email, String name, String password, String phone) {
@@ -52,6 +38,14 @@ public class User {
     }
 
     private User(String email, String name, String password, String phone) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+    }
+
+    private User(long id, String email, String name, String password, String phone) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.password = password;

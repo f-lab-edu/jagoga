@@ -3,6 +3,7 @@ package com.project.jagoga.user.presentation.controller;
 import com.project.jagoga.exception.dto.ApiResponse;
 import com.project.jagoga.exception.user.DuplicatedUserException;
 import com.project.jagoga.exception.user.NotFoundUserException;
+import com.project.jagoga.exception.user.UnAuthorizedException;
 import com.project.jagoga.exception.user.UserAuthenticationFailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,12 @@ public class UserExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createError(exception.getMessage()));
     }
+
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<ApiResponse<?>> handleUnAuthorizedException(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.createError(exception.getMessage()));
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<?>> handleValidationExceptions(BindingResult bindingResult) {
