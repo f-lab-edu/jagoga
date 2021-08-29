@@ -1,10 +1,11 @@
 package com.project.jagoga.accommodation.domain;
 
+import java.time.LocalDateTime;
+
 import com.project.jagoga.accommodation.domain.address.City;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
