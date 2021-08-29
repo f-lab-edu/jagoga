@@ -22,7 +22,10 @@ public class AccommodationService {
         return accommodationRepository.save(accommodation).getAccommodationId();
     }
 
-    public AccommodationResponseDto updateAccommodation(long accommodationId, AccommodationRequestDto accommodationRequestDto) {
+    public AccommodationResponseDto updateAccommodation(
+        long accommodationId,
+        AccommodationRequestDto accommodationRequestDto
+    ) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
                 .orElseThrow(NotExistAccommodationException::new);
 
@@ -36,14 +39,14 @@ public class AccommodationService {
         return AccommodationResponseDto.of(accommodationRepository.update(updatedAccommodation));
     }
 
-    public Long deleteAccommodation(long AccommodationId) {
-        accommodationRepository.findById(AccommodationId)
+    public Long deleteAccommodation(long accommodationId) {
+        accommodationRepository.findById(accommodationId)
                 .ifPresentOrElse(
-                        a -> accommodationRepository.delete(AccommodationId),
-                        () -> {
-                            throw new NotExistAccommodationException();
-                        });
-        return AccommodationId;
+                    a -> accommodationRepository.delete(accommodationId),
+                    () -> {
+                        throw new NotExistAccommodationException();
+                    });
+        return accommodationId;
     }
 
     public Accommodation getAccommodation(long accommodationId) {

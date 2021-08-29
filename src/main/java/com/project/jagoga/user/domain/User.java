@@ -1,8 +1,6 @@
 package com.project.jagoga.user.domain;
 
-import java.time
-    .LocalDateTime;
-
+import java.time.LocalDateTime;
 import lombok.Getter;
 import org.springframework.util.Assert;
 
@@ -14,9 +12,6 @@ public class User {
     private String name;
     private String password;
     private String phone;
-    private String Testa;
-    private String moohyungJasan;
-    private String t, a, b, c;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

@@ -9,7 +9,12 @@ import com.project.jagoga.user.domain.PasswordEncoder;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +25,16 @@ import java.util.Map;
 @Component
 public class JwtTokenAuthentication implements Authentication {
 
-    private final String SECRET_KEY;
+    private final String secretKey;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public JwtTokenAuthentication(@Value("${jwt.secret}") String SECRET_KEY, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.SECRET_KEY = SECRET_KEY;
+    public JwtTokenAuthentication(
+        @Value("${jwt.secret}") String secretKey,
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder
+    ) {
+        this.secretKey = secretKey;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -45,7 +54,7 @@ public class JwtTokenAuthentication implements Authentication {
     public void verifyLogin(String token) {
         try {
             Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(SECRET_KEY.getBytes())
+                    .setSigningKey(secretKey.getBytes())
                     .parseClaimsJws(token); // 토큰 파싱 및 검증 진행, 실패 시 에러
         } catch (ExpiredJwtException e) {
             throw new ExpiredTokenException();
@@ -74,7 +83,7 @@ public class JwtTokenAuthentication implements Authentication {
                 .setSubject("userToken")
                 .setClaims(payloads)
                 .setExpiration(expireTime)
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
     }
 }

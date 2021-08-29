@@ -18,7 +18,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private final Authentication authentication;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        Object handler
+    ) throws Exception {
         if (((HandlerMethod) handler).getMethodAnnotation(LoginCheck.class) == null) {
             return true;
         }
