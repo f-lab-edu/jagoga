@@ -41,17 +41,17 @@ public class AccommodationService {
 
     public Long deleteAccommodation(long accommodationId) {
         accommodationRepository.findById(accommodationId)
-                .ifPresentOrElse(
-                    a -> accommodationRepository.delete(accommodationId),
-                    () -> {
-                        throw new NotExistAccommodationException();
-                    });
+            .ifPresentOrElse(
+                a -> accommodationRepository.delete(accommodationId),
+                () -> {
+                    throw new NotExistAccommodationException();
+                });
         return accommodationId;
     }
 
     public Accommodation getAccommodation(long accommodationId) {
         return accommodationRepository.findById(accommodationId)
-                .orElseThrow(NotExistAccommodationException::new);
+            .orElseThrow(NotExistAccommodationException::new);
     }
 
     public List<Accommodation> getAccommodationAllList() {
@@ -64,8 +64,8 @@ public class AccommodationService {
 
     private void validateDuplicatedAccommodation(Accommodation accommodation) {
         accommodationRepository.findByName(accommodation.getAccommodationName())
-                .ifPresent(a -> {
-                    throw new DuplicatedAccommodationException();
-                });
+            .ifPresent(a -> {
+                throw new DuplicatedAccommodationException();
+            });
     }
 }
