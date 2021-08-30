@@ -4,7 +4,6 @@ import com.project.jagoga.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

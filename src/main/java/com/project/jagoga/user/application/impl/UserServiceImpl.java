@@ -1,11 +1,10 @@
 package com.project.jagoga.user.application.impl;
 
 import com.project.jagoga.exception.user.DuplicatedUserException;
+import com.project.jagoga.exception.user.ForbiddenException;
 import com.project.jagoga.exception.user.NotFoundUserException;
 import com.project.jagoga.user.application.UserService;
-import com.project.jagoga.user.domain.PasswordEncoder;
-import com.project.jagoga.user.domain.User;
-import com.project.jagoga.user.domain.UserRepository;
+import com.project.jagoga.user.domain.*;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserUpdateRequestDto;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(long id, UserUpdateRequestDto userUpdateRequestDto) {
+    public User updateUser(long id, UserUpdateRequestDto userUpdateRequestDto, AuthUser loginUser) {
+        verifyPermission(loginUser, id);
         User user = userRepository.findById(id).orElseThrow(NotFoundUserException::new);
         User updateUser = user.updateUser(userUpdateRequestDto.getName(),
                 passwordEncoder.encrypt(userUpdateRequestDto.getPassword()),
@@ -41,6 +41,12 @@ public class UserServiceImpl implements UserService {
     private void validateDuplicatedUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new DuplicatedUserException();
+        }
+    }
+
+    private void verifyPermission(AuthUser loginUser, long userId) {
+        if ((loginUser.getRole() != Role.ADMIN) && !loginUser.getId().equals(userId)) {
+            throw new ForbiddenException();
         }
     }
 }
