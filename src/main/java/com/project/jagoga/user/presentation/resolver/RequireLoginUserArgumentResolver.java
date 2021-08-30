@@ -24,7 +24,12 @@ public class RequireLoginUserArgumentResolver implements HandlerMethodArgumentRe
     }
 
     @Override
-    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+    public Object resolveArgument(
+        MethodParameter methodParameter,
+        ModelAndViewContainer modelAndViewContainer,
+        NativeWebRequest nativeWebRequest,
+        WebDataBinderFactory webDataBinderFactory
+    ) throws Exception {
         String token = nativeWebRequest.getHeader(HttpHeaders.AUTHORIZATION);
         return authentication.getLoginUser(token).orElseThrow(UnAuthorizedException::new);
     }
