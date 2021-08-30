@@ -17,12 +17,12 @@ public class AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
 
-    public Long saveAccommodation(Accommodation accommodation) {
+    public Accommodation saveAccommodation(Accommodation accommodation) {
         validateDuplicatedAccommodation(accommodation);
-        return accommodationRepository.save(accommodation).getAccommodationId();
+        return accommodationRepository.save(accommodation);
     }
 
-    public AccommodationResponseDto updateAccommodation(
+    public Accommodation updateAccommodation(
         long accommodationId,
         AccommodationRequestDto accommodationRequestDto
     ) {
@@ -36,7 +36,7 @@ public class AccommodationService {
                 accommodationRequestDto.getAccommodationType(),
                 accommodationRequestDto.getAccommodationName(),
                 accommodationRequestDto.getInformation());
-        return AccommodationResponseDto.of(accommodationRepository.update(updatedAccommodation));
+        return accommodationRepository.update(updatedAccommodation);
     }
 
     public Long deleteAccommodation(long accommodationId) {

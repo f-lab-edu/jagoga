@@ -2,13 +2,14 @@ package com.project.jagoga.accommodation.presentation.controller;
 
 import static com.project.jagoga.accommodation.presentation.controller.AccommodationController.ACCOMMODATION_API_URI;
 import com.project.jagoga.accommodation.application.AccommodationService;
+import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationResponseDto;
-import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
+
+import com.project.jagoga.exception.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,37 +29,35 @@ public class AccommodationController {
     private final AccommodationService accommodationService;
 
     @PostMapping
-    public ResponseEntity<Void> createAccommodation(
-        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto) {
-        Long accommodationId = accommodationService.saveAccommodation(accommodationRequestDto.toEntity());
-        return ResponseEntity
-            .created(URI.create(ACCOMMODATION_API_URI + "/" + accommodationId))
-            .build();
+    public ApiResponse<AccommodationResponseDto> createAccommodation(
+        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto
+    ) {
+        Accommodation accommodation = accommodationService.saveAccommodation(accommodationRequestDto.toEntity());
+        return ApiResponse.createSuccess(AccommodationResponseDto.of(accommodation));
     }
 
     @PutMapping("/{accommodationId}")
-    public ResponseEntity<AccommodationResponseDto> updateAccommodation(
+    public ApiResponse<AccommodationResponseDto> updateAccommodation(
         @PathVariable long accommodationId,
-        @Valid @RequestBody AccommodationRequestDto accommodationRequestDto) {
-        AccommodationResponseDto accommodationResponseDto
-            = accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
-        return ResponseEntity
-            .created(URI.create(ACCOMMODATION_API_URI + "/" + accommodationId))
-            .body(accommodationResponseDto);
+        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto
+    ) {
+        Accommodation accommodation =
+            accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
+        return ApiResponse.createSuccess(AccommodationResponseDto.of(accommodation));
     }
 
     @DeleteMapping("/{accommodationId}")
-    public ResponseEntity<Void> deleteAccommodation(@PathVariable long accommodationId) {
+    public ApiResponse<?> deleteAccommodation(@PathVariable long accommodationId) {
         accommodationService.deleteAccommodation(accommodationId);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.createSuccessWithNoContent();
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<List<AccommodationResponseDto>> getAccommodationListByCategory(
+    public ApiResponse<List<AccommodationResponseDto>> getAccommodationListByCategory(
         @PathVariable long categoryId) {
-        List<AccommodationResponseDto> accommodationListByCategoryId
+        List<AccommodationResponseDto> accommodationList
             = AccommodationResponseDto.listOf(
             accommodationService.getAccommodationListByCategoryId(categoryId));
-        return ResponseEntity.ok(accommodationListByCategoryId);
+        return ApiResponse.createSuccess(accommodationList);
     }
 }
