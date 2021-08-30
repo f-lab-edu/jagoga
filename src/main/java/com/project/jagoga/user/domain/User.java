@@ -1,9 +1,8 @@
 package com.project.jagoga.user.domain;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import org.springframework.util.Assert;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class User {

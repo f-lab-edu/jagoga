@@ -17,6 +17,9 @@ import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,13 +30,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenAuthentication implements Authentication {
 
-    private final String SECRET_KEY;
+    private final String secretKey;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public JwtTokenAuthentication(@Value("${jwt.secret}") String SECRET_KEY, UserRepository userRepository,
-                                  PasswordEncoder passwordEncoder) {
-        this.SECRET_KEY = SECRET_KEY;
+    public JwtTokenAuthentication(
+        @Value("${jwt.secret}") String secretKey,
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder
+    ) {
+        this.secretKey = secretKey;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -99,11 +105,11 @@ public class JwtTokenAuthentication implements Authentication {
         payloads.put("exp", expireTime);
 
         return Jwts.builder()
-            .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-            .setSubject("userToken")
-            .setClaims(payloads)
-            .setExpiration(expireTime)
-            .signWith(SignatureAlgorithm.HS256, SECRET_KEY.getBytes())
-            .compact();
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setSubject("userToken")
+                .setClaims(payloads)
+                .setExpiration(expireTime)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
+                .compact();
     }
 }
