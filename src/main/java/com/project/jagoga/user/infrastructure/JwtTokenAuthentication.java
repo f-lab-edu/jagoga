@@ -78,7 +78,7 @@ public class JwtTokenAuthentication implements Authentication {
     private Jws<Claims> tokenParsing(String token) {
         try {
             return Jwts.parser()
-                .setSigningKey(SECRET_KEY.getBytes())
+                .setSigningKey(secretKey.getBytes())
                 .parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
             throw new ExpiredTokenException();
