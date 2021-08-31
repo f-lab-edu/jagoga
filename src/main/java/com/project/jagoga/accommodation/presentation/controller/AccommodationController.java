@@ -1,14 +1,19 @@
 package com.project.jagoga.accommodation.presentation.controller;
 
 import static com.project.jagoga.accommodation.presentation.controller.AccommodationController.ACCOMMODATION_API_URI;
+
 import com.project.jagoga.accommodation.application.AccommodationService;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationResponseDto;
+
 import java.util.List;
 import javax.validation.Valid;
 
 import com.project.jagoga.exception.dto.ApiResponse;
+import com.project.jagoga.user.domain.AuthUser;
+import com.project.jagoga.user.domain.LoginCheck;
+import com.project.jagoga.user.domain.RequireLoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,27 +33,36 @@ public class AccommodationController {
 
     private final AccommodationService accommodationService;
 
+    @LoginCheck
     @PostMapping
     public ApiResponse<AccommodationResponseDto> createAccommodation(
-        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto
+        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto,
+        @RequireLoginUser AuthUser loginUser
     ) {
-        Accommodation accommodation = accommodationService.saveAccommodation(accommodationRequestDto.toEntity());
+        Accommodation accommodation =
+            accommodationService.saveAccommodation(accommodationRequestDto.toEntity(), loginUser);
         return ApiResponse.createSuccess(AccommodationResponseDto.of(accommodation));
     }
 
+    @LoginCheck
     @PutMapping("/{accommodationId}")
     public ApiResponse<AccommodationResponseDto> updateAccommodation(
         @PathVariable long accommodationId,
-        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto
+        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto,
+        @RequireLoginUser AuthUser loginUser
     ) {
         Accommodation accommodation =
-            accommodationService.updateAccommodation(accommodationId, accommodationRequestDto);
+            accommodationService.updateAccommodation(accommodationId, accommodationRequestDto, loginUser);
         return ApiResponse.createSuccess(AccommodationResponseDto.of(accommodation));
     }
 
+    @LoginCheck
     @DeleteMapping("/{accommodationId}")
-    public ApiResponse<?> deleteAccommodation(@PathVariable long accommodationId) {
-        accommodationService.deleteAccommodation(accommodationId);
+    public ApiResponse<?> deleteAccommodation(
+        @PathVariable long accommodationId,
+        @RequireLoginUser AuthUser loginUser
+    ) {
+        accommodationService.deleteAccommodation(accommodationId, loginUser);
         return ApiResponse.createSuccessWithNoContent();
     }
 
