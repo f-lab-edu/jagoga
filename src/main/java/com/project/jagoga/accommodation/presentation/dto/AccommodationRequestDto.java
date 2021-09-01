@@ -3,6 +3,7 @@ package com.project.jagoga.accommodation.presentation.dto;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
 import com.project.jagoga.accommodation.domain.address.City;
+import com.project.jagoga.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -18,6 +19,8 @@ public class AccommodationRequestDto {
     @NotBlank(message = "숙소 이름은 빈 칸일 수 없습니다.")
     @Length(max = 20, message = "이름은 20자 이내로 입력하세요.")
     private String accommodationName;
+
+    private User owner;
 
     @NotBlank(message = "형식이 맞지 않습니다")
     @Pattern(regexp = "\\d{3}-\\d{4}-\\d{4}")
@@ -35,10 +38,11 @@ public class AccommodationRequestDto {
     private AccommodationRequestDto() {
     }
 
-    public AccommodationRequestDto(String accommodationName, String phoneNumber,
-                                   City city, AccommodationType accommodationType,
-                                   String description, String information) {
+    public AccommodationRequestDto(String accommodationName, User owner, String phoneNumber,
+                                   City city, AccommodationType accommodationType, String description,
+                                   String information) {
         this.accommodationName = accommodationName;
+        this.owner = owner;
         this.phoneNumber = phoneNumber;
         this.city = city;
         this.accommodationType = accommodationType;
@@ -46,14 +50,15 @@ public class AccommodationRequestDto {
         this.information = information;
     }
 
-    public Accommodation toEntity() {
+    public Accommodation toEntity(User owner) {
         return Accommodation.builder()
-                .accommodationName(accommodationName)
-                .phoneNumber(phoneNumber)
-                .city(city)
-                .accommodationType(accommodationType)
-                .description(description)
-                .information(information)
-                .build();
+            .accommodationName(accommodationName)
+            .owner(owner)
+            .phoneNumber(phoneNumber)
+            .city(city)
+            .accommodationType(accommodationType)
+            .description(description)
+            .information(information)
+            .build();
     }
 }
