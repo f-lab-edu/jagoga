@@ -40,7 +40,7 @@ public class AccommodationController {
         @RequireLoginUser AuthUser loginUser
     ) {
         Accommodation accommodation =
-            accommodationService.saveAccommodation(accommodationRequestDto.toEntity(), loginUser);
+            accommodationService.saveAccommodation(accommodationRequestDto, loginUser);
         return ApiResponse.createSuccess(AccommodationResponseDto.of(accommodation));
     }
 

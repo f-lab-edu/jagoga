@@ -21,10 +21,10 @@ public class AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
 
-    public Accommodation saveAccommodation(Accommodation accommodation, AuthUser loginUser) {
-        User findUser = userRepository.findById(loginUser.getId()).get();
-        accommodation.registerUser(findUser);
-        VerificationUtils.verifyPermission(loginUser, findUser.getId());
+    public Accommodation saveAccommodation(AccommodationRequestDto accommodationRequestDto, AuthUser loginUser) {
+        User owner = userRepository.findById(loginUser.getId()).get();
+        VerificationUtils.verifyPermission(loginUser, owner.getId());
+        Accommodation accommodation = accommodationRequestDto.toEntity(owner);
         validateDuplicatedAccommodation(accommodation);
         return accommodationRepository.save(accommodation);
     }
@@ -36,8 +36,8 @@ public class AccommodationService {
     ) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
             .orElseThrow(NotExistAccommodationException::new);
-        User manager = accommodation.getUser();
-        VerificationUtils.verifyPermission(loginUser, manager.getId());
+        User owner = accommodation.getOwner();
+        VerificationUtils.verifyPermission(loginUser, owner.getId());
         Accommodation updatedAccommodation = accommodation.update(
             accommodationRequestDto.getAccommodationName(),
             accommodationRequestDto.getPhoneNumber(),
@@ -49,7 +49,7 @@ public class AccommodationService {
     }
 
     public Long deleteAccommodation(long accommodationId, AuthUser loginUser) {
-        User manager = accommodationRepository.findById(accommodationId).get().getUser();
+        User manager = accommodationRepository.findById(accommodationId).get().getOwner();
         VerificationUtils.verifyPermission(loginUser, manager.getId());
         accommodationRepository.findById(accommodationId)
             .ifPresentOrElse(
