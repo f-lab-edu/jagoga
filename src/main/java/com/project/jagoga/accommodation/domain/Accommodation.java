@@ -14,7 +14,7 @@ public class Accommodation {
 
     private Long accommodationId;
     private String accommodationName;
-    private User user;
+    private User owner;
     private String phoneNumber;
     private City city;
     private AccommodationType accommodationType;
@@ -28,14 +28,14 @@ public class Accommodation {
     }
 
     public Accommodation(Long accommodationId, String accommodationName,
-                         User user, String phoneNumber,
+                         User owner, String phoneNumber,
                          City city, AccommodationType accommodationType,
                          String description, String information,
                          int lowPrice, LocalDateTime createdAt,
                          LocalDateTime updatedAt) {
         this.accommodationId = accommodationId;
         this.accommodationName = accommodationName;
-        this.user = user;
+        this.owner = owner;
         this.phoneNumber = phoneNumber;
         this.city = city;
         this.accommodationType = accommodationType;
@@ -44,10 +44,6 @@ public class Accommodation {
         this.lowPrice = lowPrice;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public void registerUser(User user) {
-        this.user = user;
     }
 
     public void setAccommodationId(Long accommodationId) {
