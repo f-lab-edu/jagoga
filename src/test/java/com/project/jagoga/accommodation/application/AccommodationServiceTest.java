@@ -62,7 +62,7 @@ class AccommodationServiceTest {
     @Test
     void saveAccommodation_Success() {
         // given
-        Accommodation accommodation = AccommodationFactory.accommodation();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
 
         // when
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
@@ -77,10 +77,10 @@ class AccommodationServiceTest {
     @Test
     void saveAccommodation_Exception() {
         // given
-        Accommodation accommodation = AccommodationFactory.accommodation();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
 
         // when
-        accommodationRepository.save(accommodation);
+        accommodationService.saveAccommodation(accommodation, authUser);
 
         // then
         assertThrows(DuplicatedAccommodationException.class,
@@ -91,17 +91,17 @@ class AccommodationServiceTest {
     @Test
     void updateAccommodation_Success() {
         // given
-        Accommodation accommodation = AccommodationFactory.accommodation();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
         accommodationService.saveAccommodation(accommodation, authUser);
-        AccommodationRequestDto accommodationRequestDto
-                = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto();
 
         // when
-        accommodationService.updateAccommodation(1L, accommodationRequestDto, authUser);
+        Accommodation updatedAccommodation
+            = accommodationService.updateAccommodation(1L, accommodation2, authUser);
 
         // then
         Optional<Accommodation> findAccommodation
-                = accommodationRepository.findById(accommodation.getAccommodationId());
+                = accommodationRepository.findById(updatedAccommodation.getAccommodationId());
         assertThat(accommodation.getAccommodationName())
                 .isNotEqualTo(findAccommodation.get().getAccommodationName());
     }
@@ -121,7 +121,8 @@ class AccommodationServiceTest {
     @Test
     void delete_Success() {
         // given
-        Accommodation accommodation = AccommodationFactory.accommodation();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+
         Accommodation saveAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = saveAccommodation.getAccommodationId();
 

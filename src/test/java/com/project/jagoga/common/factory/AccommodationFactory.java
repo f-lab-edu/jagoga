@@ -18,12 +18,22 @@ public class AccommodationFactory {
 
     public static AccommodationRequestDto mockAccommodationRequestDto() {
         return createAccommodation("test",
-                "010-27270-4682",
+                "010-1111-4682",
                 null,
                 AccommodationType.PENSION,
                 "description test",
                 "information test");
     }
+
+    public static AccommodationRequestDto mockUpdatedAccommodationRequestDto() {
+        return createAccommodation("test1",
+            "010-2222-4682",
+            null,
+            AccommodationType.PENSION,
+            "description test1",
+            "information test1");
+    }
+
 
     public static Accommodation createAccommodation(String accommodationName) {
         return MockAccommodation.builder()
