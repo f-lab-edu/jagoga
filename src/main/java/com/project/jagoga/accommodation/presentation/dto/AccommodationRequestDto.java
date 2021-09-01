@@ -20,7 +20,7 @@ public class AccommodationRequestDto {
     @Length(max = 20, message = "이름은 20자 이내로 입력하세요.")
     private String accommodationName;
 
-    private User owner;
+    private Long ownerId;
 
     @NotBlank(message = "형식이 맞지 않습니다")
     @Pattern(regexp = "\\d{3}-\\d{4}-\\d{4}")
@@ -38,11 +38,11 @@ public class AccommodationRequestDto {
     private AccommodationRequestDto() {
     }
 
-    public AccommodationRequestDto(String accommodationName, User owner, String phoneNumber,
+    public AccommodationRequestDto(String accommodationName, Long ownerId, String phoneNumber,
                                    City city, AccommodationType accommodationType, String description,
                                    String information) {
         this.accommodationName = accommodationName;
-        this.owner = owner;
+        this.ownerId = ownerId;
         this.phoneNumber = phoneNumber;
         this.city = city;
         this.accommodationType = accommodationType;
@@ -53,7 +53,7 @@ public class AccommodationRequestDto {
     public Accommodation toEntity(User owner) {
         return Accommodation.builder()
             .accommodationName(accommodationName)
-            .owner(owner)
+            .ownerId(owner.getId())
             .phoneNumber(phoneNumber)
             .city(city)
             .accommodationType(accommodationType)

@@ -13,7 +13,7 @@ public class MockAccommodation {
 
     private Long accommodationId;
     private String accommodationName;
-    private User user;
+    private Long ownerId;
     private String phoneNumber;
     private City city;
     private AccommodationType accommodationType;
@@ -25,17 +25,17 @@ public class MockAccommodation {
 
     public Accommodation build() {
         return new Accommodation(
-                accommodationId,
-                accommodationName,
-                user,
-                phoneNumber,
-                city,
-                accommodationType,
-                description,
-                information,
-                lowPrice,
-                createdAt,
-                updateAt
+            accommodationId,
+            accommodationName,
+            ownerId,
+            phoneNumber,
+            city,
+            accommodationType,
+            description,
+            information,
+            lowPrice,
+            createdAt,
+            updateAt
         );
     }
 }

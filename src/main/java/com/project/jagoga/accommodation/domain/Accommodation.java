@@ -14,7 +14,7 @@ public class Accommodation {
 
     private Long accommodationId;
     private String accommodationName;
-    private User owner;
+    private Long ownerId;
     private String phoneNumber;
     private City city;
     private AccommodationType accommodationType;
@@ -27,15 +27,12 @@ public class Accommodation {
     protected Accommodation() {
     }
 
-    public Accommodation(Long accommodationId, String accommodationName,
-                         User owner, String phoneNumber,
-                         City city, AccommodationType accommodationType,
-                         String description, String information,
-                         int lowPrice, LocalDateTime createdAt,
-                         LocalDateTime updatedAt) {
+    public Accommodation(Long accommodationId, String accommodationName, Long ownerId, String phoneNumber,
+                         City city, AccommodationType accommodationType, String description, String information,
+                         int lowPrice, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.accommodationId = accommodationId;
         this.accommodationName = accommodationName;
-        this.owner = owner;
+        this.ownerId = ownerId;
         this.phoneNumber = phoneNumber;
         this.city = city;
         this.accommodationType = accommodationType;

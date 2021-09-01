@@ -36,8 +36,8 @@ public class AccommodationService {
     ) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
             .orElseThrow(NotExistAccommodationException::new);
-        User owner = accommodation.getOwner();
-        VerificationUtils.verifyPermission(loginUser, owner.getId());
+        Long ownerId = accommodation.getOwnerId();
+        VerificationUtils.verifyPermission(loginUser, ownerId);
         Accommodation updatedAccommodation = accommodation.update(
             accommodationRequestDto.getAccommodationName(),
             accommodationRequestDto.getPhoneNumber(),
@@ -49,8 +49,8 @@ public class AccommodationService {
     }
 
     public Long deleteAccommodation(long accommodationId, AuthUser loginUser) {
-        User manager = accommodationRepository.findById(accommodationId).get().getOwner();
-        VerificationUtils.verifyPermission(loginUser, manager.getId());
+        Long ownerId = accommodationRepository.findById(accommodationId).get().getOwnerId();
+        VerificationUtils.verifyPermission(loginUser, ownerId);
         accommodationRepository.findById(accommodationId)
             .ifPresentOrElse(
                 a -> accommodationRepository.delete(accommodationId),
