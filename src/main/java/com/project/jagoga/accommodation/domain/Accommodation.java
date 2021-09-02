@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.project.jagoga.accommodation.domain.address.City;
 
+import com.project.jagoga.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +14,7 @@ public class Accommodation {
 
     private Long accommodationId;
     private String accommodationName;
+    private Long ownerId;
     private String phoneNumber;
     private City city;
     private AccommodationType accommodationType;
@@ -25,13 +27,12 @@ public class Accommodation {
     protected Accommodation() {
     }
 
-    public Accommodation(Long accommodationId, String accommodationName,
-                         String phoneNumber, City city,
-                         AccommodationType accommodationType, String description,
-                         String information, int lowPrice,
-                         LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Accommodation(Long accommodationId, String accommodationName, Long ownerId, String phoneNumber,
+                         City city, AccommodationType accommodationType, String description, String information,
+                         int lowPrice, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.accommodationId = accommodationId;
         this.accommodationName = accommodationName;
+        this.ownerId = ownerId;
         this.phoneNumber = phoneNumber;
         this.city = city;
         this.accommodationType = accommodationType;

@@ -11,6 +11,7 @@ import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserUpdateRequestDto;
+import com.project.jagoga.utils.VerificationUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(long id, UserUpdateRequestDto userUpdateRequestDto, AuthUser loginUser) {
-        verifyPermission(loginUser, id);
+        VerificationUtils.verifyPermission(loginUser, id);
         User user = userRepository.findById(id).orElseThrow(NotFoundUserException::new);
         User updateUser = user.updateUser(userUpdateRequestDto.getName(),
             passwordEncoder.encrypt(userUpdateRequestDto.getPassword()),
@@ -45,12 +46,6 @@ public class UserServiceImpl implements UserService {
     private void validateDuplicatedUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new DuplicatedUserException();
-        }
-    }
-
-    private void verifyPermission(AuthUser loginUser, long userId) {
-        if ((loginUser.getRole() != Role.ADMIN) && !loginUser.getId().equals(userId)) {
-            throw new ForbiddenException();
         }
     }
 }
