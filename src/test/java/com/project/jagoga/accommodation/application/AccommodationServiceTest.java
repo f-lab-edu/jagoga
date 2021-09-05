@@ -138,7 +138,7 @@ class AccommodationServiceTest {
                 savedAccommodation.getAccommodationId(), accommodation2, anotherAuthUser));
     }
 
-    @DisplayName("숙소을 삭제한다.")
+    @DisplayName("숙소 정보를 삭제한다.")
     @Test
     void delete_Success() {
         // given
