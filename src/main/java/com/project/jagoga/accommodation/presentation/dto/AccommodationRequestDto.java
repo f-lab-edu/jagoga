@@ -26,7 +26,7 @@ public class AccommodationRequestDto {
     @Pattern(regexp = "\\d{3}-\\d{4}-\\d{4}")
     private String phoneNumber;
 
-    @NotBlank(message = "주소가 빈 칸일 수 없습니다.")
+    @NotNull(message = "주소가 빈 칸일 수 없습니다.")
     private City city;
 
     @NotNull(message = "숙소 타입을 선택해주세요.")
