@@ -88,7 +88,7 @@ class AccommodationControllerTest {
         accommodationRepository.deleteAll();
     }
 
-    @DisplayName("정상적으로 숙소 등록 시 id가 생성된다.")
+    @DisplayName("정상적으로 숙소 등록를 등록한다.")
     @Test
     void saveAccommodation_Success() throws Exception {
         // given
