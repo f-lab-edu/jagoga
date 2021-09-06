@@ -15,7 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice(basePackages = {"com.project.jagoga.user.presentation.controller"})
+@RestControllerAdvice(basePackages = {"com.project.jagoga"})
 public class UserExceptionHandler {
 
     @ExceptionHandler(DuplicatedUserException.class)

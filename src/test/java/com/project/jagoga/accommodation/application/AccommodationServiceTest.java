@@ -10,11 +10,14 @@ import com.project.jagoga.exception.accommodation.DuplicatedAccommodationExcepti
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationRepository;
 import com.project.jagoga.exception.accommodation.NotExistAccommodationException;
+import com.project.jagoga.exception.user.ForbiddenException;
 import com.project.jagoga.user.domain.AuthUser;
+import com.project.jagoga.user.domain.Role;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.infrastructure.MemoryUserRepository;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,6 +58,7 @@ class AccommodationServiceTest {
 
     @AfterEach
     public void after() {
+        userRepository.deleteAll();
         accommodationRepository.deleteAll();
     }
 
@@ -73,7 +77,7 @@ class AccommodationServiceTest {
                 .isEqualTo(accommodationRepository.findById(accommodationId).get().getAccommodationId());
     }
 
-    @DisplayName("중복된 숙소명이 있을 경우 등록 시 예외를 반환한다.")
+    @DisplayName("중복된 숙소명이 있을 경우 등록 시 예외가 발생한다.")
     @Test
     void saveAccommodation_Exception() {
         // given
@@ -92,12 +96,13 @@ class AccommodationServiceTest {
     void updateAccommodation_Success() {
         // given
         AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
-        accommodationService.saveAccommodation(accommodation, authUser);
+        Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto();
 
         // when
         Accommodation updatedAccommodation
-            = accommodationService.updateAccommodation(1L, accommodation2, authUser);
+            = accommodationService.updateAccommodation(
+                savedAccommodation.getAccommodationId(), accommodation2, authUser);
 
         // then
         Optional<Accommodation> findAccommodation
@@ -117,14 +122,30 @@ class AccommodationServiceTest {
                 () -> accommodationService.updateAccommodation(2L, accommodationRequestDto, authUser));
     }
 
-    @DisplayName("숙소을 삭제한다.")
+    @DisplayName("숙소 관리자가 아닌 유저가 숙소 정보를 수정할 경우 예외가 발생한다.")
+    @Test
+    void updateAccommodationByNotOwner_Exception() {
+        // given
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
+
+        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+        AuthUser anotherAuthUser = AuthUser.createInstance(2L, "test2@gmail.com", Role.OWNER);
+
+        // then
+        assertThrows(ForbiddenException.class,
+            () -> accommodationService.updateAccommodation(
+                savedAccommodation.getAccommodationId(), accommodation2, anotherAuthUser));
+    }
+
+    @DisplayName("숙소 정보를 삭제한다.")
     @Test
     void delete_Success() {
         // given
         AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
 
-        Accommodation saveAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
-        Long accommodationId = saveAccommodation.getAccommodationId();
+        Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
+        Long accommodationId = savedAccommodation.getAccommodationId();
 
         // when
         accommodationService.deleteAccommodation(accommodationId, authUser);
@@ -132,5 +153,62 @@ class AccommodationServiceTest {
         // then
         assertThrows(NotExistAccommodationException.class,
                 () -> accommodationService.getAccommodation(accommodationId));
+    }
+
+    @DisplayName("숙소 관리자가 아닌 유저가 숙소를 삭제할 경우 예외가 발생한다.")
+    @Test
+    void deleteAccommodationByNotOwner_Exception() {
+        // given
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+
+        Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
+        Long accommodationId = savedAccommodation.getAccommodationId();
+
+        AuthUser anotherAuthUser = AuthUser.createInstance(100000L, "test2@gmail.com", Role.OWNER);
+
+        // then
+        assertThrows(ForbiddenException.class,
+            () -> accommodationService.deleteAccommodation(accommodationId, anotherAuthUser));
+    }
+
+    @DisplayName("관리자는 숙소 정보를 수정할 수 있다.")
+    @Test
+    void updateAccommodationByAdmin_Success() {
+        // given
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
+        Long accommodationId = savedAccommodation.getAccommodationId();
+
+        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+        AuthUser anotherAuthUser = AuthUser.createInstance(2L, "admin@gmail.com", Role.ADMIN);
+
+        // when
+        Accommodation updatedAccommodation
+            = accommodationService.updateAccommodation(accommodationId, accommodation2, anotherAuthUser);
+
+        // then
+        Accommodation findAccommodation
+            = accommodationService.getAccommodation(updatedAccommodation.getAccommodationId());
+        Assertions.assertThat(findAccommodation.getAccommodationName())
+            .isEqualTo(accommodation2.getAccommodationName());
+    }
+
+    @DisplayName("관리자는 숙소 정보를 삭제할 수 있다.")
+    @Test
+    void deleteAccommodationByAdmin_Success() {
+        // given
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+
+        Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
+        Long accommodationId = savedAccommodation.getAccommodationId();
+
+        AuthUser anotherAuthUser = AuthUser.createInstance(2L, "test2@gmail.com", Role.ADMIN);
+
+        // when
+        accommodationService.deleteAccommodation(accommodationId, anotherAuthUser);
+
+        // then
+        assertThrows(NotExistAccommodationException.class,
+            () -> accommodationService.getAccommodation(accommodationId));
     }
 }
