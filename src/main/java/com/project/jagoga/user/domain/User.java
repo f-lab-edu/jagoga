@@ -1,20 +1,36 @@
 package com.project.jagoga.user.domain;
 
-import java.time.LocalDateTime;
+import com.project.jagoga.utils.BaseTimeEntity;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+@Entity
+@Table(name = "USERS")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User {
+public class User extends BaseTimeEntity {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "user_id")
     private Long id;
+
     private String email;
     private String name;
     private String password;
     private String phone;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     public void setId(Long id) {
         this.id = id;
@@ -24,8 +40,10 @@ public class User {
         this.password = password;
     }
 
-    public User updateUser(String name, String password, String phone) {
-        return new User(this.id, this.email, name, password, phone, this.role);
+    public void updateUser(String name, String password, String phone) {
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
     }
 
     public static User createInstance(String email, String name, String password, String phone) {

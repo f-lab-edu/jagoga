@@ -1,23 +1,27 @@
 package com.project.jagoga.user.application.impl;
 
+import static org.junit.jupiter.api.Assertions.*;
 import com.project.jagoga.exception.user.DuplicatedUserException;
 import com.project.jagoga.exception.user.ForbiddenException;
-import com.project.jagoga.user.domain.*;
-import com.project.jagoga.user.infrastructure.BCryptPasswordEncoder;
-import com.project.jagoga.user.infrastructure.MemoryUserRepository;
+import com.project.jagoga.user.application.UserService;
+import com.project.jagoga.user.domain.AuthUser;
+import com.project.jagoga.user.domain.Role;
+import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+@SpringBootTest
+@Transactional
 class UserServiceImplTest {
 
-    UserRepository userRepository = new MemoryUserRepository();
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder);
+    @Autowired
+    UserService userService;
 
     String email;
     String name;
@@ -43,8 +47,6 @@ class UserServiceImplTest {
         // then
         assertNotEquals(password, user.getPassword());
         assertEquals(Role.BASIC, user.getRole());
-
-        userRepository.deleteAll();
     }
 
     @Test
@@ -54,12 +56,11 @@ class UserServiceImplTest {
         userService.signUp(userCreateRequestDto);
 
         // when
-        Exception exception = assertThrows(DuplicatedUserException.class, () -> userService.signUp(userCreateRequestDto));
+        Exception exception =
+            assertThrows(DuplicatedUserException.class, () -> userService.signUp(userCreateRequestDto));
 
         // then
         assertEquals("이미 존재하는 회원입니다", exception.getMessage());
-
-        userRepository.deleteAll();
     }
 
     @Test
@@ -67,20 +68,19 @@ class UserServiceImplTest {
     public void updateUser() {
         // given
         User user = userService.signUp(userCreateRequestDto);
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updatename", "!@#ASkdkdkd", "010-4321-4321");
+        UserUpdateRequestDto userUpdateRequestDto =
+            new UserUpdateRequestDto("updatename", "!@#ASkdkdkd", "010-4321-4321");
         AuthUser authUser = AuthUser.createInstance(user.getId(), user.getEmail(), user.getRole());
 
         // when
         User updateUser = userService.updateUser(user.getId(), userUpdateRequestDto, authUser);
 
         // then
-        assertEquals(user.getEmail(), updateUser.getEmail());
-        assertEquals(user.getRole(), updateUser.getRole());
-        assertNotEquals(user.getName(), updateUser.getName());
-        assertNotEquals(user.getPassword(), updateUser.getPassword());
-        assertNotEquals(user.getPhone(), updateUser.getPhone());
-
-        userRepository.deleteAll();
+        assertEquals(email, updateUser.getEmail());
+        assertEquals(Role.BASIC, updateUser.getRole());
+        assertNotEquals(name, updateUser.getName());
+        assertNotEquals(password, updateUser.getPassword());
+        assertNotEquals(phone, updateUser.getPhone());
     }
 
     @Test
@@ -88,19 +88,19 @@ class UserServiceImplTest {
     public void updateOtherUser() {
         // given
         User user = userService.signUp(userCreateRequestDto);
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updatename", "!@#ASkdkdkd", "010-4321-4321");
+        UserUpdateRequestDto userUpdateRequestDto =
+            new UserUpdateRequestDto("updatename", "!@#ASkdkdkd", "010-4321-4321");
 
         long otherUserId = 123L;
         assertNotEquals(user.getId(), otherUserId);
         AuthUser authUser = AuthUser.createInstance(otherUserId, user.getEmail(), user.getRole());
 
         // when
-        Exception exception = assertThrows(ForbiddenException.class, () -> userService.updateUser(user.getId(), userUpdateRequestDto, authUser));
+        Exception exception = assertThrows(ForbiddenException.class,
+            () -> userService.updateUser(user.getId(), userUpdateRequestDto, authUser));
 
         // then
         assertEquals("권한이 없는 사용자입니다", exception.getMessage());
-
-        userRepository.deleteAll();
     }
 
     @Test
@@ -108,7 +108,8 @@ class UserServiceImplTest {
     public void updateOtherUserByAdmin() {
         // given
         User user = userService.signUp(userCreateRequestDto);
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updatename", "!@#ASkdkdkd", "010-4321-4321");
+        UserUpdateRequestDto userUpdateRequestDto =
+            new UserUpdateRequestDto("updatename", "!@#ASkdkdkd", "010-4321-4321");
 
         long otherUserId = 123L;
         assertNotEquals(user.getId(), otherUserId);
@@ -118,12 +119,10 @@ class UserServiceImplTest {
         User updateUser = userService.updateUser(user.getId(), userUpdateRequestDto, authUser);
 
         // then
-        assertEquals(user.getEmail(), updateUser.getEmail());
-        assertEquals(user.getRole(), updateUser.getRole());
-        assertNotEquals(user.getName(), updateUser.getName());
-        assertNotEquals(user.getPassword(), updateUser.getPassword());
-        assertNotEquals(user.getPhone(), updateUser.getPhone());
-
-        userRepository.deleteAll();
+        assertEquals(email, updateUser.getEmail());
+        assertEquals(Role.BASIC, updateUser.getRole());
+        assertNotEquals(name, updateUser.getName());
+        assertNotEquals(password, updateUser.getPassword());
+        assertNotEquals(phone, updateUser.getPhone());
     }
 }

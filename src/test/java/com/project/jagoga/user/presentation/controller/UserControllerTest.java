@@ -9,6 +9,7 @@ import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserUpdateRequestDto;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,11 @@ class UserControllerTest {
         loginRequestDto = new LoginRequestDto(email, password);
     }
 
+    @AfterEach
+    public void after() {
+        userRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("사용자 로그인 테스트")
     public void login() throws Exception {
@@ -76,8 +82,6 @@ class UserControllerTest {
                 .content(loginJson))
                 .andExpect(status().isOk())
                 .andExpect((ResultMatcher) content().string(Matchers.containsString("accessToken")));
-
-        userRepository.deleteAll();
     }
 
     @Test
@@ -87,7 +91,8 @@ class UserControllerTest {
         User user = userService.signUp(userCreateRequestDto);
         String token = authentication.login(loginRequestDto);
 
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updateName", "@abcdefAd", "010-4321-4321");
+        UserUpdateRequestDto userUpdateRequestDto =
+            new UserUpdateRequestDto("updateName", "@abcdefAd", "010-4321-4321");
         String updateUserJson = objectMapper.writeValueAsString(userUpdateRequestDto);
 
         // when then
@@ -95,8 +100,6 @@ class UserControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .content(updateUserJson))
                 .andExpect(status().isOk());
-
-        userRepository.deleteAll();
     }
 
     @Test
@@ -105,14 +108,13 @@ class UserControllerTest {
         // given
         User user = userService.signUp(userCreateRequestDto);
 
-        UserUpdateRequestDto userUpdateRequestDto = new UserUpdateRequestDto("updateName", "@abcdefdAS", "010-4321-4321");
+        UserUpdateRequestDto userUpdateRequestDto =
+            new UserUpdateRequestDto("updateName", "@abcdefdAS", "010-4321-4321");
         String updateUserJson = objectMapper.writeValueAsString(userUpdateRequestDto);
 
         // when then
         mockMvc.perform(put("/api/users/" + user.getId()).contentType(MediaType.APPLICATION_JSON)
                 .content(updateUserJson))
                 .andExpect(status().isUnauthorized());
-
-        userRepository.deleteAll();
     }
 }
