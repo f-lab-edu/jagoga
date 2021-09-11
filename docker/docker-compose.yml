@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./jagoga-mysql-volume:/var/lib/mysql
+    restart: always
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: jagogaqwer1234
+      MYSQL_DATABASE: jagoga_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: jagogaqwer1234
+    ports:
+      - "3307:3306"
