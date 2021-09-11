@@ -22,3 +22,14 @@ jobs:
       run: chmod +x gradlew
     - name: Test with Gradle
       run: ./gradlew test
+    - name: Setup MySQL
+      uses: samin/mysql-action@v1
+      with:
+        host port: 3307
+        container port: 3306
+        character set server: 'utf8'
+        mysql version: '5.7'
+        mysql database: 'jagoga_db'
+        mysql root password: ${{ secrets.RootPassword }}
+        mysql user: 'admin'
+        mysql password: ${{ secrets.DatabasePassword }}  
