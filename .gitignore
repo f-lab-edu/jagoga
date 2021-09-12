@@ -39,4 +39,3 @@ out/
 ### ignore properties file
 application-dev.properties
 application-prod.properties
-application.yml
