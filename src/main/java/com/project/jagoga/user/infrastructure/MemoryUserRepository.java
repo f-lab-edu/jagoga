@@ -1,16 +1,12 @@
 package com.project.jagoga.user.infrastructure;
 
-import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import org.apache.commons.lang3.StringUtils;
 
-@Repository
 public class MemoryUserRepository implements UserRepository {
 
     private static ConcurrentHashMap<Long, User> userMap = new ConcurrentHashMap<>();
@@ -42,7 +38,7 @@ public class MemoryUserRepository implements UserRepository {
     @Override
     public boolean existsByEmail(String email) {
         return userMap.values().stream()
-                .anyMatch(user -> StringUtils.equals(user.getEmail(), email));
+            .anyMatch(user -> StringUtils.equals(user.getEmail(), email));
     }
 
     @Override
