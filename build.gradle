@@ -27,6 +27,7 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
 	implementation 'javax.xml.bind:jaxb-api:2.1'
 	implementation 'mysql:mysql-connector-java'
+	runtimeOnly 'com.h2database:h2'
 }
 
 test {
