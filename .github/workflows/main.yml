@@ -13,17 +13,6 @@ jobs:
   test: 
     runs-on: ubuntu-latest 
     steps:
-    - name: Setup MySQL
-      uses: samin/mysql-action@v1
-      with:
-        host port: 3307
-        container port: 3306
-        character set server: 'utf8'
-        mysql version: '5.7'
-        mysql database: 'jagoga_db'
-        mysql root password: ${{ secrets.RootPassword }}
-        mysql user: 'admin'
-        mysql password: ${{ secrets.DatabasePassword }}  
     - uses: actions/checkout@v2 
     - name: Set up JDK 11 
       uses: actions/setup-java@v1
