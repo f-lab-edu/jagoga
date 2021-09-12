@@ -28,6 +28,7 @@ dependencies {
 	implementation 'javax.xml.bind:jaxb-api:2.1'
 	implementation 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2'
+	implementation 'org.flywaydb:flyway-core:7.15.0'
 }
 
 test {
