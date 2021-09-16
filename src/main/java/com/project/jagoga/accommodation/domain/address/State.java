@@ -2,17 +2,25 @@ package com.project.jagoga.accommodation.domain.address;
 
 import lombok.Getter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 @Getter
+@Entity
 public class State {
 
-    private Long stateId;
+    @Id @GeneratedValue
+    @Column(name = "state_id")
+    private Long id;
     private String name;
 
-    private State() {
+    protected State() {
     }
 
-    public State(Long stateId, String name) {
-        this.stateId = stateId;
+    public State(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 }
