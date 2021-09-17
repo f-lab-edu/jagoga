@@ -7,7 +7,6 @@ import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationResponseDto;
 
-import java.util.List;
 import javax.validation.Valid;
 
 import com.project.jagoga.exception.dto.ApiResponse;
@@ -16,7 +15,6 @@ import com.project.jagoga.user.domain.LoginCheck;
 import com.project.jagoga.user.domain.RequireLoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -66,6 +64,7 @@ public class AccommodationController {
         return ApiResponse.createSuccessWithNoContent();
     }
 
+    /*
     @GetMapping("/{categoryId}")
     public ApiResponse<List<AccommodationResponseDto>> getAccommodationListByCategory(
         @PathVariable long categoryId) {
@@ -74,4 +73,5 @@ public class AccommodationController {
             accommodationService.getAccommodationListByCategoryId(categoryId));
         return ApiResponse.createSuccess(accommodationList);
     }
+     */
 }
