@@ -2,8 +2,6 @@ package com.project.jagoga.accommodation.infrastructure;
 
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationRepository;
-import com.project.jagoga.accommodation.domain.address.City;
-import org.springframework.stereotype.Repository;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Repository
 public class MemoryAccommodationRepository implements AccommodationRepository {
 
     private static ConcurrentMap<Long, Accommodation> accommodationStore = new ConcurrentHashMap<>();
@@ -21,20 +18,20 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
 
     @Override
     public Accommodation save(Accommodation accommodation) {
-        accommodation.setAccommodationId(sequence.incrementAndGet());
-        accommodationStore.put(accommodation.getAccommodationId(), accommodation);
+        accommodation.setId(sequence.incrementAndGet());
+        accommodationStore.put(accommodation.getId(), accommodation);
         return accommodation;
     }
 
     @Override
     public Accommodation update(Accommodation accommodation) {
-        accommodationStore.put(accommodation.getAccommodationId(), accommodation);
+        accommodationStore.put(accommodation.getId(), accommodation);
         return accommodation;
     }
 
     @Override
     public Long delete(long accommodationId) {
-        return accommodationStore.remove(accommodationId).getAccommodationId();
+        return accommodationStore.remove(accommodationId).getId();
     }
 
     @Override
@@ -48,7 +45,7 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
     }
 
     @Override
-    public Optional<Accommodation> findByName(String accommodationName) {
+    public Optional<Accommodation> findByAccommodationName(String accommodationName) {
         return accommodationStore.values().stream()
                 .filter(accommodation -> StringUtils.equals(accommodation.getAccommodationName(), accommodationName))
                 .findAny();
@@ -59,11 +56,10 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
         accommodationStore.clear();
     }
 
+    /*
     @Override
     public List<Accommodation> findByCategoryId(long categoryId) {
-        /**
-         * TODO: category Id를 통해 city->accommodation 조회
-         */
         return null;
     }
+     */
 }

@@ -1,7 +1,5 @@
 package com.project.jagoga.accommodation.domain;
 
-import com.project.jagoga.accommodation.domain.address.City;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +15,9 @@ public interface AccommodationRepository {
 
     Optional<Accommodation> findById(long accommodationId);
 
-    Optional<Accommodation> findByName(String accommodationName);
+    Optional<Accommodation> findByAccommodationName(String accommodationName);
 
     void deleteAll();
 
-    List<Accommodation> findByCategoryId(long accommodationId);
+//    List<Accommodation> findByCategoryId(long categoryId);
 }
