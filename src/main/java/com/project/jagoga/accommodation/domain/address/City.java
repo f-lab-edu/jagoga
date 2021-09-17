@@ -32,7 +32,6 @@ public class City {
     protected City() {
     }
 
-
     public City(Long id, String name, State state, Category category) {
         this.id = id;
         this.name = name;

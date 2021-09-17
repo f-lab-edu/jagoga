@@ -1,36 +1,50 @@
 package com.project.jagoga.accommodation.domain;
 
-import java.time.LocalDateTime;
-
 import com.project.jagoga.accommodation.domain.address.City;
 
-import com.project.jagoga.user.domain.User;
+import com.project.jagoga.utils.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 @Getter
 @Builder
-public class Accommodation {
+@Entity
+public class Accommodation extends BaseTimeEntity {
 
-    private Long accommodationId;
+    @Id @GeneratedValue
+    @Column(name = "accommodation_id")
+    private Long id;
     private String accommodationName;
     private Long ownerId;
     private String phoneNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id")
     private City city;
+
+    @Enumerated(EnumType.STRING)
     private AccommodationType accommodationType;
     private String description;
     private String information;
     private int lowPrice;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     protected Accommodation() {
     }
 
-    public Accommodation(Long accommodationId, String accommodationName, Long ownerId, String phoneNumber,
+    public Accommodation(Long id, String accommodationName, Long ownerId, String phoneNumber,
                          City city, AccommodationType accommodationType, String description, String information,
-                         int lowPrice, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.accommodationId = accommodationId;
+                         int lowPrice) {
+        this.id = id;
         this.accommodationName = accommodationName;
         this.ownerId = ownerId;
         this.phoneNumber = phoneNumber;
@@ -39,19 +53,17 @@ public class Accommodation {
         this.description = description;
         this.information = information;
         this.lowPrice = lowPrice;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
-    public void setAccommodationId(Long accommodationId) {
-        this.accommodationId = accommodationId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Accommodation update(String accommodationName, String phoneNumber,
                        City city, AccommodationType accommodationType,
                        String description, String information) {
         return Accommodation.builder()
-                .accommodationId(this.getAccommodationId())
+                .id(this.getId())
                 .accommodationName(accommodationName)
                 .phoneNumber(phoneNumber)
                 .city(city)
