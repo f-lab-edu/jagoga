@@ -19,23 +19,43 @@ public class AccommodationFactory {
     }
 
     public static AccommodationRequestDto mockAccommodationRequestDto() {
+        State state = new State(null, "강원");
+        Category category = new Category(null, "강릉/경포");
+        City city = new City(null, "강릉시", state, category);
+
         return createAccommodation("test",
-                "010-1111-4682",
-                savedCity(),
-                AccommodationType.PENSION,
-                "description test",
-                "information test");
+            "010-1111-4682",
+            city,
+            AccommodationType.PENSION,
+            "description test",
+            "information test");
+    }
+
+    public static AccommodationRequestDto mockAnotherAccommodationRequestDto() {
+        State state = new State(null, "경남");
+        Category category = new Category(null, "거제/통영");
+        City city = new City(null, "거제시", state, category);
+
+        return createAccommodation("test",
+            "010-1111-2222",
+            city,
+            AccommodationType.PENSION,
+            "description test",
+            "information test");
     }
 
     public static AccommodationRequestDto mockUpdatedAccommodationRequestDto() {
-        return createAccommodation("test1",
+        State state = new State(null, "경남");
+        Category category = new Category(null, "거제/통영");
+        City city = new City(null, "거제시", state, category);
+
+        return createAccommodation("test12",
             "010-2222-4682",
-            savedCity(),
+            city,
             AccommodationType.PENSION,
             "description test1",
             "information test1");
     }
-
 
     public static Accommodation createAccommodation(String accommodationName) {
         return MockAccommodation.builder()
@@ -66,13 +86,5 @@ public class AccommodationFactory {
             .description(description)
             .information(information)
             .build();
-    }
-
-    public static City savedCity() {
-        State state = new State(1L, "강원");
-        Category category = new Category(2L, "강릉/경포");
-        City city = new City(3L, "강릉시", state, category);
-
-        return city;
     }
 }

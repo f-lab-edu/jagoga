@@ -6,16 +6,13 @@ import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationRepository;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.common.factory.AccommodationFactory;
-import com.project.jagoga.exception.user.ForbiddenException;
 import com.project.jagoga.user.application.impl.UserServiceImpl;
 import com.project.jagoga.user.domain.AuthUser;
 import com.project.jagoga.user.domain.Authentication;
-import com.project.jagoga.user.domain.Role;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
 import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +42,7 @@ class AccommodationControllerTest {
     private AccommodationService accommodationService;
 
     @Autowired
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private Authentication authentication;
@@ -92,7 +88,6 @@ class AccommodationControllerTest {
     @Test
     void saveAccommodation_Success() throws Exception {
         // given
-
         AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
 
         // then
@@ -131,7 +126,7 @@ class AccommodationControllerTest {
         AccommodationRequestDto newAccommodation = AccommodationFactory.mockUpdatedAccommodationRequestDto();
 
         // then
-        mockMvc.perform(put("/api/accommodation/" + savedAccommodation.getAccommodationId())
+        mockMvc.perform(put("/api/accommodation/" + savedAccommodation.getId())
             .header(HttpHeaders.AUTHORIZATION, token)
             .content(objectMapper.writeValueAsString(newAccommodation))
             .contentType(MediaType.APPLICATION_JSON))
@@ -178,7 +173,7 @@ class AccommodationControllerTest {
             = AccommodationFactory.mockUpdatedAccommodationRequestDto();
 
         // then
-        mockMvc.perform(put("/api/accommodation/" + savedAccommodation.getAccommodationId())
+        mockMvc.perform(put("/api/accommodation/" + savedAccommodation.getId())
             .header(HttpHeaders.AUTHORIZATION, newToken)
             .content(objectMapper.writeValueAsString(updatedAccommodationRequestDto))
             .contentType(MediaType.APPLICATION_JSON))
@@ -193,7 +188,7 @@ class AccommodationControllerTest {
         AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
 
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
-        Long accommodationId = savedAccommodation.getAccommodationId();
+        Long accommodationId = savedAccommodation.getId();
 
         //then
         mockMvc.perform(delete("/api/accommodation/" + accommodationId)
@@ -210,7 +205,7 @@ class AccommodationControllerTest {
         AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
 
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
-        Long accommodationId = savedAccommodation.getAccommodationId();
+        Long accommodationId = savedAccommodation.getId();
 
         String newEmail = "test100@gmail.com";
         String newPassword = "1q2w3e4r!";
