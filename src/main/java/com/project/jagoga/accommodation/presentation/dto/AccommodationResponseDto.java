@@ -19,7 +19,7 @@ public class AccommodationResponseDto {
     private AccommodationType accommodationType;
     private int lowPrice;
 
-    private AccommodationResponseDto() {
+    protected AccommodationResponseDto() {
     }
 
     public AccommodationResponseDto(String accommodationName, City city,

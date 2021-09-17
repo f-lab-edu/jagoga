@@ -35,7 +35,7 @@ public class AccommodationRequestDto {
     private String description;
     private String information;
 
-    private AccommodationRequestDto() {
+    protected AccommodationRequestDto() {
     }
 
     public AccommodationRequestDto(String accommodationName, Long ownerId, String phoneNumber,
