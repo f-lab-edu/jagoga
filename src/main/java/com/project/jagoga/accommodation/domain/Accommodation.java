@@ -3,8 +3,10 @@ package com.project.jagoga.accommodation.domain;
 import com.project.jagoga.accommodation.domain.address.City;
 
 import com.project.jagoga.utils.BaseTimeEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +21,7 @@ import javax.persistence.ManyToOne;
 @Getter
 @Builder
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Accommodation extends BaseTimeEntity {
 
     @Id @GeneratedValue
@@ -37,9 +40,6 @@ public class Accommodation extends BaseTimeEntity {
     private String description;
     private String information;
     private int lowPrice;
-
-    protected Accommodation() {
-    }
 
     public Accommodation(Long id, String accommodationName, Long ownerId, String phoneNumber,
                          City city, AccommodationType accommodationType, String description, String information,

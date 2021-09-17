@@ -1,7 +1,9 @@
 package com.project.jagoga.accommodation.domain.address;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.persistence.ManyToOne;
 @Getter
 @Builder
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class City {
 
     @Id @GeneratedValue
@@ -28,9 +31,6 @@ public class City {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    protected City() {
-    }
 
     public City(Long id, String name, State state, Category category) {
         this.id = id;
