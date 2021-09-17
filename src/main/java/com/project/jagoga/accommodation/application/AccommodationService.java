@@ -75,12 +75,6 @@ public class AccommodationService {
         return accommodationRepository.findAll();
     }
 
-    /*
-    public List<Accommodation> getAccommodationListByCategoryId(long categoryId) {
-        return accommodationRepository.findByCategoryId(categoryId);
-    }
-     */
-
     public void deleteAll() {
         accommodationRepository.deleteAll();
     }

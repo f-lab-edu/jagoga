@@ -55,11 +55,4 @@ public class MemoryAccommodationRepository implements AccommodationRepository {
     public void deleteAll() {
         accommodationStore.clear();
     }
-
-    /*
-    @Override
-    public List<Accommodation> findByCategoryId(long categoryId) {
-        return null;
-    }
-     */
 }

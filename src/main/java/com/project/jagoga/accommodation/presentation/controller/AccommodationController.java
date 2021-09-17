@@ -63,15 +63,4 @@ public class AccommodationController {
         accommodationService.deleteAccommodation(accommodationId, loginUser);
         return ApiResponse.createSuccessWithNoContent();
     }
-
-    /*
-    @GetMapping("/{categoryId}")
-    public ApiResponse<List<AccommodationResponseDto>> getAccommodationListByCategory(
-        @PathVariable long categoryId) {
-        List<AccommodationResponseDto> accommodationList
-            = AccommodationResponseDto.listOf(
-            accommodationService.getAccommodationListByCategoryId(categoryId));
-        return ApiResponse.createSuccess(accommodationList);
-    }
-     */
 }
