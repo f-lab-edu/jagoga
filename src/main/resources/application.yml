@@ -7,14 +7,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         # show_sql: true
         format_sql: true
 
 spring.flyway:
-  baselineOnMigrate: true
+  baseline-version: 1
 
 logging:
   level:
