@@ -13,8 +13,11 @@ spring:
         # show_sql: true
         format_sql: true
 
-spring.flyway:
-  baseline-version: 1
+  flyway:
+    baseline-version: 1
+    url: jdbc:mysql://localhost:3307/jagoga_db
+    user: admin
+    password: jagogaqwer1234
 
 logging:
   level:
