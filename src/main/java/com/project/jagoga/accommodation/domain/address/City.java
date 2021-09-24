@@ -28,14 +28,12 @@ public class City {
     @JoinColumn(name = "state_id")
     private State state;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private long categoryId;
 
-    public City(Long id, String name, State state, Category category) {
+    public City(Long id, String name, State state, long categoryId) {
         this.id = id;
         this.name = name;
         this.state = state;
-        this.category = category;
+        this.categoryId = categoryId;
     }
 }

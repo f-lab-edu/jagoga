@@ -12,11 +12,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Getter
 @Builder
@@ -28,12 +25,9 @@ public class Accommodation extends BaseTimeEntity {
     @Column(name = "accommodation_id")
     private Long id;
     private String accommodationName;
-    private Long ownerId;
+    private long ownerId;
     private String phoneNumber;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id")
-    private City city;
+    private long cityId;
 
     @Enumerated(EnumType.STRING)
     private AccommodationType accommodationType;
@@ -41,14 +35,13 @@ public class Accommodation extends BaseTimeEntity {
     private String information;
     private int lowPrice;
 
-    public Accommodation(Long id, String accommodationName, Long ownerId, String phoneNumber,
-                         City city, AccommodationType accommodationType, String description, String information,
-                         int lowPrice) {
+    public Accommodation(Long id, String accommodationName, long ownerId, String phoneNumber, long cityId,
+                         AccommodationType accommodationType, String description, String information, int lowPrice) {
         this.id = id;
         this.accommodationName = accommodationName;
         this.ownerId = ownerId;
         this.phoneNumber = phoneNumber;
-        this.city = city;
+        this.cityId = cityId;
         this.accommodationType = accommodationType;
         this.description = description;
         this.information = information;
@@ -60,13 +53,13 @@ public class Accommodation extends BaseTimeEntity {
     }
 
     public Accommodation update(String accommodationName, String phoneNumber,
-                       City city, AccommodationType accommodationType,
+                       long cityId, AccommodationType accommodationType,
                        String description, String information) {
         return Accommodation.builder()
                 .id(this.getId())
                 .accommodationName(accommodationName)
                 .phoneNumber(phoneNumber)
-                .city(city)
+                .cityId(cityId)
                 .accommodationType(accommodationType)
                 .description(description)
                 .information(information)

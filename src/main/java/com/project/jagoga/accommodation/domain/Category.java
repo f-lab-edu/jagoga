@@ -1,4 +1,4 @@
-package com.project.jagoga.accommodation.domain.address;
+package com.project.jagoga.accommodation.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
