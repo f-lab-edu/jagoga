@@ -18,6 +18,4 @@ public interface AccommodationRepository {
     Optional<Accommodation> findByAccommodationName(String accommodationName);
 
     void deleteAll();
-
-//    List<Accommodation> findByCategoryId(long categoryId);
 }
