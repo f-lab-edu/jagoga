@@ -1,6 +1,5 @@
 package com.project.jagoga.accommodation.application;
 
-import com.project.jagoga.accommodation.infrastructure.address.JpaAddressRepository;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.exception.accommodation.DuplicatedAccommodationException;
 import com.project.jagoga.exception.accommodation.NotExistAccommodationException;
@@ -22,7 +21,6 @@ import java.util.List;
 public class AccommodationService {
 
     private final UserRepository userRepository;
-    private final JpaAddressRepository jpaAddressRepository;
     private final AccommodationRepository accommodationRepository;
 
     public Accommodation saveAccommodation(AccommodationRequestDto accommodationRequestDto, AuthUser loginUser) {
@@ -30,7 +28,6 @@ public class AccommodationService {
         VerificationUtils.verifyPermission(loginUser, owner.getId());
         Accommodation accommodation = accommodationRequestDto.toEntity(owner);
         validateDuplicatedAccommodation(accommodation);
-        jpaAddressRepository.save(accommodation);
         return accommodationRepository.save(accommodation);
     }
 
@@ -41,21 +38,20 @@ public class AccommodationService {
     ) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
             .orElseThrow(NotExistAccommodationException::new);
-        Long ownerId = accommodation.getOwnerId();
+        long ownerId = accommodation.getOwnerId();
         VerificationUtils.verifyPermission(loginUser, ownerId);
         Accommodation updatedAccommodation = accommodation.update(
             accommodationRequestDto.getAccommodationName(),
             accommodationRequestDto.getPhoneNumber(),
-            accommodationRequestDto.getCity(),
+            accommodationRequestDto.getCity().getId(),
             accommodationRequestDto.getAccommodationType(),
             accommodationRequestDto.getAccommodationName(),
             accommodationRequestDto.getInformation());
-        jpaAddressRepository.save(updatedAccommodation);
         return accommodationRepository.update(updatedAccommodation);
     }
 
     public Long deleteAccommodation(long accommodationId, AuthUser loginUser) {
-        Long ownerId = accommodationRepository.findById(accommodationId).get().getOwnerId();
+        long ownerId = accommodationRepository.findById(accommodationId).get().getOwnerId();
         VerificationUtils.verifyPermission(loginUser, ownerId);
         accommodationRepository.findById(accommodationId)
             .ifPresentOrElse(
