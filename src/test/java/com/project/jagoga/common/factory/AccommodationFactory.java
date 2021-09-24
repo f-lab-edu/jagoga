@@ -2,7 +2,7 @@ package com.project.jagoga.common.factory;
 
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
-import com.project.jagoga.accommodation.domain.address.Category;
+import com.project.jagoga.accommodation.domain.Category;
 import com.project.jagoga.accommodation.domain.address.City;
 import com.project.jagoga.accommodation.domain.address.State;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
@@ -18,11 +18,7 @@ public class AccommodationFactory {
         return createAccommodation(1L, "testAccommodation");
     }
 
-    public static AccommodationRequestDto mockAccommodationRequestDto() {
-        State state = new State(null, "강원");
-        Category category = new Category(null, "강릉/경포");
-        City city = new City(null, "강릉시", state, category);
-
+    public static AccommodationRequestDto mockAccommodationRequestDto(City city) {
         return createAccommodation("test",
             "010-1111-4682",
             city,
@@ -31,11 +27,7 @@ public class AccommodationFactory {
             "information test");
     }
 
-    public static AccommodationRequestDto mockAnotherAccommodationRequestDto() {
-        State state = new State(null, "경남");
-        Category category = new Category(null, "거제/통영");
-        City city = new City(null, "거제시", state, category);
-
+    public static AccommodationRequestDto mockAnotherAccommodationRequestDto(City city) {
         return createAccommodation("test",
             "010-1111-2222",
             city,
@@ -44,11 +36,7 @@ public class AccommodationFactory {
             "information test");
     }
 
-    public static AccommodationRequestDto mockUpdatedAccommodationRequestDto() {
-        State state = new State(null, "경남");
-        Category category = new Category(null, "거제/통영");
-        City city = new City(null, "거제시", state, category);
-
+    public static AccommodationRequestDto mockUpdatedAccommodationRequestDto(City city) {
         return createAccommodation("test12",
             "010-2222-4682",
             city,

@@ -3,7 +3,12 @@ package com.project.jagoga.accommodation.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.project.jagoga.accommodation.infrastructure.address.JpaAddressRepository;
+import com.project.jagoga.accommodation.domain.Category;
+import com.project.jagoga.accommodation.domain.address.City;
+import com.project.jagoga.accommodation.domain.address.State;
+import com.project.jagoga.accommodation.infrastructure.address.JpaCategoryRepository;
+import com.project.jagoga.accommodation.infrastructure.address.JpaCityRepository;
+import com.project.jagoga.accommodation.infrastructure.address.JpaStateRepository;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.common.factory.AccommodationFactory;
 import com.project.jagoga.exception.accommodation.DuplicatedAccommodationException;
@@ -34,7 +39,13 @@ class AccommodationServiceTest {
     private AccommodationService accommodationService;
 
     @Autowired
-    private JpaAddressRepository jpaAddressRepository;
+    JpaCategoryRepository jpaCategoryRepository;
+
+    @Autowired
+    JpaStateRepository jpaStateRepository;
+
+    @Autowired
+    JpaCityRepository jpaCityRepository;
 
     private String email;
     private String name;
@@ -44,6 +55,10 @@ class AccommodationServiceTest {
     private UserCreateRequestDto userCreateRequestDto;
     private User user;
     private AuthUser authUser;
+
+    private Category category;
+    private State state;
+    private City city;
 
     @BeforeEach
     public void init() {
@@ -55,14 +70,20 @@ class AccommodationServiceTest {
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
         user = userService.signUp(userCreateRequestDto);
         authUser = AuthUser.createInstance(user.getId(), user.getEmail(), user.getRole());
+
+        category = new Category(null, "강릉/경포");
+        jpaCategoryRepository.save(category);
+        state = new State(null, "강원");
+        jpaStateRepository.save(state);
+        city = new City(null, "강릉시", state, category.getId());
+        jpaCityRepository.save(city);
     }
 
     @DisplayName("정상적으로 숙소 등록 시 id가 생성된다.")
     @Test
     void saveAccommodation_Success() {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
-
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         // when
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = savedAccommodation.getId();
@@ -77,11 +98,11 @@ class AccommodationServiceTest {
     void saveAccommodation_Exception() {
 
         //given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         accommodationService.saveAccommodation(accommodation, authUser);
 
         // when
-        AccommodationRequestDto anotherAccommodation = AccommodationFactory.mockAnotherAccommodationRequestDto();
+        AccommodationRequestDto anotherAccommodation = AccommodationFactory.mockAnotherAccommodationRequestDto(city);
 
         // then
         assertThrows(DuplicatedAccommodationException.class,
@@ -92,9 +113,9 @@ class AccommodationServiceTest {
     @Test
     void updateAccommodation_Success() {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
-        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto(city);
 
         // when
         Accommodation updatedAccommodation
@@ -112,7 +133,7 @@ class AccommodationServiceTest {
     @Test
     void updateNotExistAccommodation_Success() {
         // given
-        AccommodationRequestDto accommodationRequestDto = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodationRequestDto = AccommodationFactory.mockAccommodationRequestDto(city);
 
         // then
         assertThrows(NotExistAccommodationException.class,
@@ -123,10 +144,10 @@ class AccommodationServiceTest {
     @Test
     void updateAccommodationByNotOwner_Exception() {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
 
-        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto(city);
         AuthUser anotherAuthUser = AuthUser.createInstance(2L, "test2@gmail.com", Role.OWNER);
 
         // then
@@ -139,7 +160,7 @@ class AccommodationServiceTest {
     @Test
     void delete_Success() {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
 
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = savedAccommodation.getId();
@@ -156,7 +177,7 @@ class AccommodationServiceTest {
     @Test
     void deleteAccommodationByNotOwner_Exception() {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
 
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = savedAccommodation.getId();
@@ -172,11 +193,11 @@ class AccommodationServiceTest {
     @Test
     void updateAccommodationByAdmin_Success() {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = savedAccommodation.getId();
 
-        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+        AccommodationRequestDto accommodation2 = AccommodationFactory.mockUpdatedAccommodationRequestDto(city);
         AuthUser anotherAuthUser = AuthUser.createInstance(2L, "admin@gmail.com", Role.ADMIN);
 
         // when
@@ -194,7 +215,7 @@ class AccommodationServiceTest {
     @Test
     void deleteAccommodationByAdmin_Success() {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
 
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = savedAccommodation.getId();

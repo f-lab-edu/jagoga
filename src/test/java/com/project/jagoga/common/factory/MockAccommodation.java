@@ -28,7 +28,7 @@ public class MockAccommodation {
             accommodationName,
             ownerId,
             phoneNumber,
-            city,
+            city.getId(),
             accommodationType,
             description,
             information,

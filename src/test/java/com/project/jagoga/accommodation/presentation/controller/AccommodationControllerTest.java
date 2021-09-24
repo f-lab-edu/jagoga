@@ -4,6 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.jagoga.accommodation.application.AccommodationService;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationRepository;
+import com.project.jagoga.accommodation.domain.Category;
+import com.project.jagoga.accommodation.domain.address.City;
+import com.project.jagoga.accommodation.domain.address.State;
+import com.project.jagoga.accommodation.infrastructure.address.JpaCategoryRepository;
+import com.project.jagoga.accommodation.infrastructure.address.JpaCityRepository;
+import com.project.jagoga.accommodation.infrastructure.address.JpaStateRepository;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.common.factory.AccommodationFactory;
 import com.project.jagoga.user.application.impl.UserServiceImpl;
@@ -51,6 +57,15 @@ class AccommodationControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    JpaCategoryRepository jpaCategoryRepository;
+
+    @Autowired
+    JpaStateRepository jpaStateRepository;
+
+    @Autowired
+    JpaCityRepository jpaCityRepository;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     private String email;
@@ -64,6 +79,10 @@ class AccommodationControllerTest {
     private AuthUser authUser;
     private String token;
 
+    private Category category;
+    private State state;
+    private City city;
+
     @BeforeEach
     public void init() {
         email = "test1223@test";
@@ -76,6 +95,13 @@ class AccommodationControllerTest {
         authUser = AuthUser.createInstance(user.getId(), user.getEmail(), user.getRole());
         loginRequestDto = new LoginRequestDto(email, password);
         token = authentication.login(loginRequestDto);
+
+        category = new Category(null, "강릉/경포");
+        jpaCategoryRepository.save(category);
+        state = new State(null, "강원");
+        jpaStateRepository.save(state);
+        city = new City(null, "강릉시", state, category.getId());
+        jpaCityRepository.save(city);
     }
 
     @AfterEach
@@ -88,7 +114,7 @@ class AccommodationControllerTest {
     @Test
     void saveAccommodation_Success() throws Exception {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
 
         // then
         mockMvc.perform(post("/api/accommodation")
@@ -103,7 +129,7 @@ class AccommodationControllerTest {
     @Test
     void saveAccommodation_Exception() throws Exception {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
 
         // when
         accommodationService.saveAccommodation(accommodation, authUser);
@@ -121,9 +147,9 @@ class AccommodationControllerTest {
     @Test
     void updateAccommodation_Success() throws Exception {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
-        AccommodationRequestDto newAccommodation = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+        AccommodationRequestDto newAccommodation = AccommodationFactory.mockUpdatedAccommodationRequestDto(city);
 
         // then
         mockMvc.perform(put("/api/accommodation/" + savedAccommodation.getId())
@@ -138,9 +164,10 @@ class AccommodationControllerTest {
     @Test
     void updateNotExistAccommodation_Success() throws Exception {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         accommodationService.saveAccommodation(accommodation, authUser);
-        AccommodationRequestDto newAccommodationRequestDto = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+        AccommodationRequestDto newAccommodationRequestDto
+            = AccommodationFactory.mockUpdatedAccommodationRequestDto(city);
 
         // then
         mockMvc.perform(put("/api/accommodation/10000")
@@ -155,7 +182,7 @@ class AccommodationControllerTest {
     @Test
     void updateAccommodationByNotOwner_Exception() throws Exception {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
 
         String newEmail = "test100@gmail.com";
@@ -170,7 +197,7 @@ class AccommodationControllerTest {
         String newToken = authentication.login(loginRequestDto);
 
         AccommodationRequestDto updatedAccommodationRequestDto
-            = AccommodationFactory.mockUpdatedAccommodationRequestDto();
+            = AccommodationFactory.mockUpdatedAccommodationRequestDto(city);
 
         // then
         mockMvc.perform(put("/api/accommodation/" + savedAccommodation.getId())
@@ -185,7 +212,7 @@ class AccommodationControllerTest {
     @Test
     public void delete_Success() throws Exception {
         //given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
 
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = savedAccommodation.getId();
@@ -202,7 +229,7 @@ class AccommodationControllerTest {
     @Test
     void deleteAccommodationByNotOwner_Exception() throws Exception {
         // given
-        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto();
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
 
         Accommodation savedAccommodation = accommodationService.saveAccommodation(accommodation, authUser);
         Long accommodationId = savedAccommodation.getId();
