@@ -15,17 +15,17 @@ import static java.util.stream.Collectors.*;
 public class AccommodationResponseDto {
 
     private String accommodationName;
-    private City city;
+    private long cityId;
     private AccommodationType accommodationType;
     private int lowPrice;
 
     protected AccommodationResponseDto() {
     }
 
-    public AccommodationResponseDto(String accommodationName, City city,
+    public AccommodationResponseDto(String accommodationName, long cityId,
                                     AccommodationType accommodationType, int lowPrice) {
         this.accommodationName = accommodationName;
-        this.city = city;
+        this.cityId = cityId;
         this.accommodationType = accommodationType;
         this.lowPrice = lowPrice;
     }
@@ -33,7 +33,7 @@ public class AccommodationResponseDto {
     public static AccommodationResponseDto of(Accommodation accommodation) {
         return AccommodationResponseDto.builder()
                 .accommodationName(accommodation.getAccommodationName())
-                .city(accommodation.getCity())
+                .cityId(accommodation.getCityId())
                 .accommodationType(accommodation.getAccommodationType())
                 .lowPrice(accommodation.getLowPrice())
                 .build();

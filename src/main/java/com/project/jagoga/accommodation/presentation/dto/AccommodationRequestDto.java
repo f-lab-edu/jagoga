@@ -55,7 +55,7 @@ public class AccommodationRequestDto {
             .accommodationName(accommodationName)
             .ownerId(owner.getId())
             .phoneNumber(phoneNumber)
-            .city(city)
+            .cityId(city.getId())
             .accommodationType(accommodationType)
             .description(description)
             .information(information)
