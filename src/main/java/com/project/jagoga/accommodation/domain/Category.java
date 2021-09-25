@@ -1,4 +1,4 @@
-package com.project.jagoga.accommodation.domain.address;
+package com.project.jagoga.accommodation.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,14 +12,14 @@ import javax.persistence.Id;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class State {
+public class Category {
 
     @Id @GeneratedValue
-    @Column(name = "state_id")
+    @Column(name = "category_id")
     private Long id;
     private String name;
 
-    public State(Long id, String name) {
+    public Category(Long id, String name) {
         this.id = id;
         this.name = name;
     }

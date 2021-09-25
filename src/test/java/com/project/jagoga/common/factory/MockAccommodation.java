@@ -3,7 +3,6 @@ package com.project.jagoga.common.factory;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
 import com.project.jagoga.accommodation.domain.address.City;
-import com.project.jagoga.user.domain.User;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -29,13 +28,11 @@ public class MockAccommodation {
             accommodationName,
             ownerId,
             phoneNumber,
-            city,
+            city.getId(),
             accommodationType,
             description,
             information,
-            lowPrice,
-            createdAt,
-            updateAt
+            lowPrice
         );
     }
 }

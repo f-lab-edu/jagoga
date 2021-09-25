@@ -11,15 +11,17 @@ import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.utils.VerificationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AccommodationService {
 
-    private final AccommodationRepository accommodationRepository;
     private final UserRepository userRepository;
+    private final AccommodationRepository accommodationRepository;
 
     public Accommodation saveAccommodation(AccommodationRequestDto accommodationRequestDto, AuthUser loginUser) {
         User owner = userRepository.findById(loginUser.getId()).get();
@@ -36,12 +38,12 @@ public class AccommodationService {
     ) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
             .orElseThrow(NotExistAccommodationException::new);
-        Long ownerId = accommodation.getOwnerId();
+        long ownerId = accommodation.getOwnerId();
         VerificationUtils.verifyPermission(loginUser, ownerId);
         Accommodation updatedAccommodation = accommodation.update(
             accommodationRequestDto.getAccommodationName(),
             accommodationRequestDto.getPhoneNumber(),
-            accommodationRequestDto.getCity(),
+            accommodationRequestDto.getCity().getId(),
             accommodationRequestDto.getAccommodationType(),
             accommodationRequestDto.getAccommodationName(),
             accommodationRequestDto.getInformation());
@@ -49,7 +51,7 @@ public class AccommodationService {
     }
 
     public Long deleteAccommodation(long accommodationId, AuthUser loginUser) {
-        Long ownerId = accommodationRepository.findById(accommodationId).get().getOwnerId();
+        long ownerId = accommodationRepository.findById(accommodationId).get().getOwnerId();
         VerificationUtils.verifyPermission(loginUser, ownerId);
         accommodationRepository.findById(accommodationId)
             .ifPresentOrElse(
@@ -60,7 +62,7 @@ public class AccommodationService {
         return accommodationId;
     }
 
-    public Accommodation getAccommodation(long accommodationId) {
+    public Accommodation getAccommodationById(long accommodationId) {
         return accommodationRepository.findById(accommodationId)
             .orElseThrow(NotExistAccommodationException::new);
     }
@@ -69,12 +71,12 @@ public class AccommodationService {
         return accommodationRepository.findAll();
     }
 
-    public List<Accommodation> getAccommodationListByCategoryId(long categoryId) {
-        return accommodationRepository.findByCategoryId(categoryId);
+    public void deleteAll() {
+        accommodationRepository.deleteAll();
     }
 
     private void validateDuplicatedAccommodation(Accommodation accommodation) {
-        accommodationRepository.findByName(accommodation.getAccommodationName())
+        accommodationRepository.findByAccommodationName(accommodation.getAccommodationName())
             .ifPresent(a -> {
                 throw new DuplicatedAccommodationException();
             });

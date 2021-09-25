@@ -2,7 +2,7 @@ package com.project.jagoga.common.factory;
 
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
-import com.project.jagoga.accommodation.domain.address.Category;
+import com.project.jagoga.accommodation.domain.Category;
 import com.project.jagoga.accommodation.domain.address.City;
 import com.project.jagoga.accommodation.domain.address.State;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
@@ -18,24 +18,32 @@ public class AccommodationFactory {
         return createAccommodation(1L, "testAccommodation");
     }
 
-    public static AccommodationRequestDto mockAccommodationRequestDto() {
+    public static AccommodationRequestDto mockAccommodationRequestDto(City city) {
         return createAccommodation("test",
-                "010-1111-4682",
-                savedCity(),
-                AccommodationType.PENSION,
-                "description test",
-                "information test");
+            "010-1111-4682",
+            city,
+            AccommodationType.PENSION,
+            "description test",
+            "information test");
     }
 
-    public static AccommodationRequestDto mockUpdatedAccommodationRequestDto() {
-        return createAccommodation("test1",
+    public static AccommodationRequestDto mockAnotherAccommodationRequestDto(City city) {
+        return createAccommodation("test",
+            "010-1111-2222",
+            city,
+            AccommodationType.PENSION,
+            "description test",
+            "information test");
+    }
+
+    public static AccommodationRequestDto mockUpdatedAccommodationRequestDto(City city) {
+        return createAccommodation("test12",
             "010-2222-4682",
-            savedCity(),
+            city,
             AccommodationType.PENSION,
             "description test1",
             "information test1");
     }
-
 
     public static Accommodation createAccommodation(String accommodationName) {
         return MockAccommodation.builder()
@@ -66,13 +74,5 @@ public class AccommodationFactory {
             .description(description)
             .information(information)
             .build();
-    }
-
-    public static City savedCity() {
-        State state = new State(1L, "강원");
-        Category category = new Category(2L, "강릉/경포");
-        City city = new City(3L, "강릉시", state, category);
-
-        return city;
     }
 }

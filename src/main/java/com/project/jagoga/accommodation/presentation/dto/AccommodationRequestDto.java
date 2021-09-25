@@ -35,7 +35,7 @@ public class AccommodationRequestDto {
     private String description;
     private String information;
 
-    private AccommodationRequestDto() {
+    protected AccommodationRequestDto() {
     }
 
     public AccommodationRequestDto(String accommodationName, Long ownerId, String phoneNumber,
@@ -55,7 +55,7 @@ public class AccommodationRequestDto {
             .accommodationName(accommodationName)
             .ownerId(owner.getId())
             .phoneNumber(phoneNumber)
-            .city(city)
+            .cityId(city.getId())
             .accommodationType(accommodationType)
             .description(description)
             .information(information)
