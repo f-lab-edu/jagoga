@@ -18,7 +18,7 @@ public class RoomTypeCreateRequestDto {
     @Length(max = 20, message = "이름은 20자 이내로 입력하세요")
     private String name;
 
-    @Length(max = 20, message = "설명은은 200자 이내로 입력하세요")
+    @Length(max = 200, message = "설명은 200자 이내로 입력하세요")
     private String description;
 
     public RoomType toEntity() {
