@@ -5,6 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hibernate.validator.constraints.Length;
 
 @Getter
 @AllArgsConstructor
@@ -14,8 +15,10 @@ public class RoomTypeCreateRequestDto {
     private long accommodationId;
 
     @NotBlank(message = "룸 타입명은 빈 값일 수 없습니다.")
+    @Length(max = 20, message = "이름은 20자 이내로 입력하세요")
     private String name;
 
+    @Length(max = 20, message = "설명은은 200자 이내로 입력하세요")
     private String description;
 
     public RoomType toEntity() {
