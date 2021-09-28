@@ -65,10 +65,10 @@ class RoomTypeServiceTest {
 
     @BeforeEach
     public void setUp() {
-        String email = "test1223@test";
-        String name = "testname";
-        String password = "@Aabcdef";
-        String phone = "010-1234-1234";
+        email = "test1223@test";
+        name = "testname";
+        password = "@Aabcdef";
+        phone = "010-1234-1234";
 
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
         user = userService.signUp(userCreateRequestDto);
