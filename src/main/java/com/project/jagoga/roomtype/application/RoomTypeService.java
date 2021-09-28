@@ -2,6 +2,7 @@ package com.project.jagoga.roomtype.application;
 
 import com.project.jagoga.accommodation.application.AccommodationService;
 import com.project.jagoga.accommodation.domain.Accommodation;
+import com.project.jagoga.exception.roomtype.NotExistRoomTypeException;
 import com.project.jagoga.roomtype.domain.RoomType;
 import com.project.jagoga.roomtype.domain.RoomTypeRepository;
 import com.project.jagoga.roomtype.presentation.dto.RoomTypeCreateRequestDto;
@@ -25,5 +26,10 @@ public class RoomTypeService {
         VerificationUtils.verifyPermission(loginUser, accommodation.getOwnerId());
         RoomType roomType = roomTypeCreateRequestDto.toEntity();
         return roomTypeRepository.save(roomType);
+    }
+
+    public RoomType getRoomTypeById(long roomTypeId) {
+        return roomTypeRepository.findById(roomTypeId)
+            .orElseThrow(NotExistRoomTypeException::new);
     }
 }
