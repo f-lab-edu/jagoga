@@ -27,13 +27,16 @@ public class RoomType extends BaseTimeEntity {
 
     private String description;
 
-    public static RoomType createInstance(long accommodationId, String name, String description) {
-        return new RoomType(accommodationId, name, description);
+    private int price; // 1박 2일 기준 가격
+
+    public static RoomType createInstance(long accommodationId, String name, String description, int price) {
+        return new RoomType(accommodationId, name, description, price);
     }
 
-    private RoomType(long accommodationId, String name, String description) {
+    private RoomType(long accommodationId, String name, String description, int price) {
         this.accommodationId = accommodationId;
         this.name = name;
         this.description = description;
+        this.price = price;
     }
 }
