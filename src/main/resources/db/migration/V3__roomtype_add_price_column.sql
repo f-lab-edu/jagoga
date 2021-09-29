@@ -1,0 +1,1 @@
+ALTER TABLE roomtype ADD price int;

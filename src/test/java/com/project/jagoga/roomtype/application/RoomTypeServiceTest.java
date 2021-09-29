@@ -62,6 +62,7 @@ class RoomTypeServiceTest {
     long accommodationId;
     String roomTypeName;
     String description;
+    int price;
 
     @BeforeEach
     public void setUp() {
@@ -69,6 +70,7 @@ class RoomTypeServiceTest {
         name = "testname";
         password = "@Aabcdef";
         phone = "010-1234-1234";
+        price = 25000;
 
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
         user = userService.signUp(userCreateRequestDto);
@@ -94,7 +96,7 @@ class RoomTypeServiceTest {
     void registerRoomtype() {
         // given
         RoomTypeCreateRequestDto roomTypeCreateRequestDto =
-            new RoomTypeCreateRequestDto(roomTypeName, description);
+            new RoomTypeCreateRequestDto(roomTypeName, description, price);
 
         // when
         RoomType roomType = roomTypeService.registerRoomType(accommodationId, roomTypeCreateRequestDto, authUser);
@@ -114,7 +116,7 @@ class RoomTypeServiceTest {
         authUser = AuthUser.createInstance(otherUser.getId(), otherUser.getEmail(), OWNER);
 
         RoomTypeCreateRequestDto roomTypeCreateRequestDto =
-            new RoomTypeCreateRequestDto(roomTypeName, description);
+            new RoomTypeCreateRequestDto(roomTypeName, description, price);
 
         // when, then
         assertThrows(ForbiddenException.class,
@@ -126,7 +128,7 @@ class RoomTypeServiceTest {
     void registerRoomTypeAtNotExistAccommodation() {
         // given
         RoomTypeCreateRequestDto roomTypeCreateRequestDto =
-            new RoomTypeCreateRequestDto(roomTypeName, description);
+            new RoomTypeCreateRequestDto(roomTypeName, description, price);
 
         // when, then
         long notExistAccommodationId = 1111L;
