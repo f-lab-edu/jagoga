@@ -20,11 +20,13 @@ public class RoomTypeService {
     private final AccommodationService accommodationService;
     private final RoomTypeRepository roomTypeRepository;
 
-    public RoomType registerRoomType(RoomTypeCreateRequestDto roomTypeCreateRequestDto, AuthUser loginUser) {
+    public RoomType registerRoomType(
+        long accommodationId, RoomTypeCreateRequestDto roomTypeCreateRequestDto, AuthUser loginUser
+    ) {
         Accommodation accommodation =
-            accommodationService.getAccommodationById(roomTypeCreateRequestDto.getAccommodationId());
+            accommodationService.getAccommodationById(accommodationId);
         VerificationUtils.verifyPermission(loginUser, accommodation.getOwnerId());
-        RoomType roomType = roomTypeCreateRequestDto.toEntity();
+        RoomType roomType = roomTypeCreateRequestDto.toEntity(accommodationId);
         return roomTypeRepository.save(roomType);
     }
 

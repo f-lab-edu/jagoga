@@ -94,10 +94,10 @@ class RoomTypeServiceTest {
     void registerRoomtype() {
         // given
         RoomTypeCreateRequestDto roomTypeCreateRequestDto =
-            new RoomTypeCreateRequestDto(accommodationId, roomTypeName, description);
+            new RoomTypeCreateRequestDto(roomTypeName, description);
 
         // when
-        RoomType roomType = roomTypeService.registerRoomType(roomTypeCreateRequestDto, authUser);
+        RoomType roomType = roomTypeService.registerRoomType(accommodationId, roomTypeCreateRequestDto, authUser);
 
         // then
         assertThat(roomType.getId())
@@ -114,11 +114,11 @@ class RoomTypeServiceTest {
         authUser = AuthUser.createInstance(otherUser.getId(), otherUser.getEmail(), OWNER);
 
         RoomTypeCreateRequestDto roomTypeCreateRequestDto =
-            new RoomTypeCreateRequestDto(accommodationId, roomTypeName, description);
+            new RoomTypeCreateRequestDto(roomTypeName, description);
 
         // when, then
         assertThrows(ForbiddenException.class,
-            () -> roomTypeService.registerRoomType(roomTypeCreateRequestDto, authUser));
+            () -> roomTypeService.registerRoomType(accommodationId, roomTypeCreateRequestDto, authUser));
     }
 
     @DisplayName("존재하지 않는 숙소에 roomType을 등록할 수 없다.")
@@ -126,10 +126,13 @@ class RoomTypeServiceTest {
     void registerRoomTypeAtNotExistAccommodation() {
         // given
         RoomTypeCreateRequestDto roomTypeCreateRequestDto =
-            new RoomTypeCreateRequestDto(1111L, roomTypeName, description);
+            new RoomTypeCreateRequestDto(roomTypeName, description);
 
         // when, then
+        long notExistAccommodationId = 1111L;
         assertThrows(NotExistAccommodationException.class,
-            () -> roomTypeService.registerRoomType(roomTypeCreateRequestDto, authUser));
+            () -> accommodationService.getAccommodationById(notExistAccommodationId));
+        assertThrows(NotExistAccommodationException.class,
+            () -> roomTypeService.registerRoomType(notExistAccommodationId, roomTypeCreateRequestDto, authUser));
     }
 }
