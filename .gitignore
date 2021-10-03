@@ -40,5 +40,9 @@ out/
 application-dev.properties
 application-prod.properties
 
-### jagoga-mysql-volume ###
-docker/jagoga-mysql-volume
+### docker ###
+docker/volume/
+
+### elastic APM ###
+apm-server-7.15.0-darwin-x86_64
+elastic-apm-agent-1.26.0.jar
