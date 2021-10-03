@@ -1,10 +1,51 @@
 version: '2'
 
 services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=elasticsearch
+      - cluster.initial_master_nodes=elasticsearch
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./volume/elasticsearch-volume:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.0
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    networks:
+      - elastic
+
+  apm:
+    image: docker.elastic.co/apm/apm-server:7.15.0
+    ports:
+      - 8200:8200
+    volumes:
+      - ./volume/apm-server:/usr/share/apm-server/data"
+    environment:
+      output.elasticsearch.hosts: '["elasticsearch:9200"]'
+
   mysql:
     image: mysql:5.7
     volumes:
-      - ./jagoga-mysql-volume:/var/lib/mysql
+      - ./volume/jagoga-mysql-volume:/var/lib/mysql
     restart: always
     container_name: mysql_db
     environment:
@@ -14,3 +55,13 @@ services:
       MYSQL_PASSWORD: jagogaqwer1234
     ports:
       - "3307:3306"
+
+volumes:
+  elasticsearch-volume:
+    driver: local
+  jagoga-mysql-volume:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
