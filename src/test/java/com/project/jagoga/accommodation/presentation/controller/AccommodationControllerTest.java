@@ -15,6 +15,7 @@ import com.project.jagoga.common.factory.AccommodationFactory;
 import com.project.jagoga.user.application.impl.UserServiceImpl;
 import com.project.jagoga.user.domain.AuthUser;
 import com.project.jagoga.user.domain.Authentication;
+import com.project.jagoga.user.domain.Role;
 import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
@@ -92,7 +93,8 @@ class AccommodationControllerTest {
 
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
         user = userService.signUp(userCreateRequestDto);
-        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), user.getRole());
+        userService.changeRoleToOwner(user.getId());
+        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), Role.OWNER);
         loginRequestDto = new LoginRequestDto(email, password);
         token = authentication.login(loginRequestDto);
 

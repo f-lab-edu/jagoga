@@ -69,7 +69,7 @@ class AccommodationServiceTest {
 
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
         user = userService.signUp(userCreateRequestDto);
-        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), user.getRole());
+        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), Role.OWNER);
 
         category = new Category(null, "강릉/경포");
         jpaCategoryRepository.save(category);

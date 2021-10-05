@@ -10,4 +10,6 @@ public interface UserService {
     public User signUp(UserCreateRequestDto userCreateRequestDto);
 
     public User updateUser(long id, UserUpdateRequestDto userUpdateRequestDto, AuthUser loginUser);
+
+    public User changeRoleToOwner(long id);
 }

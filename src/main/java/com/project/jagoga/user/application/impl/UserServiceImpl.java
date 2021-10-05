@@ -35,11 +35,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(long id, UserUpdateRequestDto userUpdateRequestDto, AuthUser loginUser) {
-        VerificationUtils.verifyPermission(loginUser, id);
+        VerificationUtils.verifyBasicPermission(loginUser, id);
         User user = userRepository.findById(id).orElseThrow(NotFoundUserException::new);
         user.updateUser(userUpdateRequestDto.getName(),
             passwordEncoder.encrypt(userUpdateRequestDto.getPassword()),
             userUpdateRequestDto.getPhone());
+        return user;
+    }
+
+    @Override
+    public User changeRoleToOwner(long id) {
+        User user = userRepository.findById(id).orElseThrow(NotFoundUserException::new);
+        user.changeRoleToOwner();
         return user;
     }
 
