@@ -93,6 +93,18 @@ class AccommodationServiceTest {
                 .isEqualTo(accommodationService.getAccommodationById(accommodationId).getId());
     }
 
+    @DisplayName("일반 사용자가 숙소 등록 시 예외가 발생한다.")
+    @Test
+    void basicUserSaveAccommodation_Exception() {
+        // given
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
+        // when
+        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), Role.BASIC);
+        // then
+        assertThrows(ForbiddenException.class,
+            () -> accommodationService.saveAccommodation(accommodation, authUser));
+    }
+
     @DisplayName("중복된 숙소명이 있을 경우 등록 시 예외가 발생한다.")
     @Test
     void saveAccommodation_Exception() {
