@@ -69,7 +69,7 @@ class AccommodationServiceTest {
 
         userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
         user = userService.signUp(userCreateRequestDto);
-        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), user.getRole());
+        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), Role.OWNER);
 
         category = new Category(null, "강릉/경포");
         jpaCategoryRepository.save(category);
@@ -91,6 +91,18 @@ class AccommodationServiceTest {
         // then
         assertThat(accommodationId)
                 .isEqualTo(accommodationService.getAccommodationById(accommodationId).getId());
+    }
+
+    @DisplayName("일반 사용자가 숙소 등록 시 예외가 발생한다.")
+    @Test
+    void basicUserSaveAccommodation_Exception() {
+        // given
+        AccommodationRequestDto accommodation = AccommodationFactory.mockAccommodationRequestDto(city);
+        // when
+        authUser = AuthUser.createInstance(user.getId(), user.getEmail(), Role.BASIC);
+        // then
+        assertThrows(ForbiddenException.class,
+            () -> accommodationService.saveAccommodation(accommodation, authUser));
     }
 
     @DisplayName("중복된 숙소명이 있을 경우 등록 시 예외가 발생한다.")

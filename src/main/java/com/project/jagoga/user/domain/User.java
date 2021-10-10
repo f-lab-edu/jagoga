@@ -46,6 +46,10 @@ public class User extends BaseTimeEntity {
         this.phone = phone;
     }
 
+    public void changeRoleToOwner() {
+        this.role = Role.OWNER;
+    }
+
     public static User createInstance(String email, String name, String password, String phone) {
         Assert.hasText(email, "이메일이 존재하지 않습니다");
         Assert.hasText(name, "이름이 존재하지 않습니다");
