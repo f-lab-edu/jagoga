@@ -3,6 +3,7 @@ package com.project.jagoga.accommodation.domain;
 import com.project.jagoga.accommodation.domain.address.City;
 
 import com.project.jagoga.utils.BaseTimeEntity;
+import javax.persistence.GenerationType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,8 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Accommodation extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accommodation_id")
     private Long id;
     private String accommodationName;
