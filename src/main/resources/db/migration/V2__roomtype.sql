@@ -3,6 +3,7 @@ create table roomtype (
     accommodation_id BIGINT not null,
     name varchar(50),
     description varchar(255),
+    price INT,
     created_at DATETIME,
     modified_at DATETIME,
     FOREIGN KEY (accommodation_id)

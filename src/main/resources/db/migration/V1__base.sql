@@ -10,8 +10,29 @@ create table users (
     UNIQUE INDEX ux_email (email)
 ) engine=InnoDB default character set = utf8;
 
+create table category (
+    category_id bigint AUTO_INCREMENT not null,
+    name varchar(255),
+    primary key (category_id)
+) engine=InnoDB;
+
+create table state (
+    state_id bigint AUTO_INCREMENT not null,
+    name varchar(255),
+    primary key (state_id)
+) engine=InnoDB;
+
+create table city (
+    city_id bigint AUTO_INCREMENT not null,
+    name varchar(255),
+    category_id bigint,
+    state_id bigint,
+    primary key (city_id),
+    FOREIGN KEY (state_id) REFERENCES state (state_id)
+) engine=InnoDB;
+
 create table accommodation (
-    accommodation_id bigint not null,
+    accommodation_id bigint AUTO_INCREMENT not null,
     created_at datetime(6),
     modified_at datetime(6),
     accommodation_name varchar(255),
@@ -22,25 +43,7 @@ create table accommodation (
     owner_id bigint,
     phone_number varchar(255),
     city_id bigint,
-    primary key (accommodation_id)
-) engine=InnoDB;
-
-create table category (
-    category_id bigint not null,
-    name varchar(255),
-    primary key (category_id)
-) engine=InnoDB;
-
-create table city (
-    city_id bigint not null,
-    name varchar(255),
-    category_id bigint,
-    state_id bigint,
-    primary key (city_id)
-) engine=InnoDB;
-
-create table state (
-    state_id bigint not null,
-    name varchar(255),
-    primary key (state_id)
+    primary key (accommodation_id),
+    FOREIGN KEY (owner_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (city_id) REFERENCES city (city_id)
 ) engine=InnoDB;

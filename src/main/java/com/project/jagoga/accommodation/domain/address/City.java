@@ -1,5 +1,6 @@
 package com.project.jagoga.accommodation.domain.address;
 
+import javax.persistence.GenerationType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,8 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class City {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "city_id")
     private Long id;
     private String name;

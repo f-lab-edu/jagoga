@@ -1,5 +1,6 @@
 package com.project.jagoga.accommodation.domain.address;
 
+import javax.persistence.GenerationType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,8 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class State {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "state_id")
     private Long id;
     private String name;
