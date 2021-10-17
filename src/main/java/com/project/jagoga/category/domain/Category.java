@@ -1,4 +1,4 @@
-package com.project.jagoga.accommodation.domain;
+package com.project.jagoga.category.domain;
 
 import javax.persistence.GenerationType;
 import lombok.AccessLevel;

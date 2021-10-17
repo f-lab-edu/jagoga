@@ -2,9 +2,7 @@ package com.project.jagoga.common.factory;
 
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationType;
-import com.project.jagoga.accommodation.domain.Category;
 import com.project.jagoga.accommodation.domain.address.City;
-import com.project.jagoga.accommodation.domain.address.State;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import lombok.Builder;
 

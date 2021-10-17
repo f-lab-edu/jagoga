@@ -1,6 +1,6 @@
-package com.project.jagoga.accommodation.infrastructure.address;
+package com.project.jagoga.category.infrastructure;
 
-import com.project.jagoga.accommodation.domain.Category;
+import com.project.jagoga.category.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaCategoryRepository extends JpaRepository<Category, Long> {

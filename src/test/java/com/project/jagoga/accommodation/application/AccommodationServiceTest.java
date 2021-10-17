@@ -3,10 +3,10 @@ package com.project.jagoga.accommodation.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.project.jagoga.accommodation.domain.Category;
+import com.project.jagoga.category.domain.Category;
 import com.project.jagoga.accommodation.domain.address.City;
 import com.project.jagoga.accommodation.domain.address.State;
-import com.project.jagoga.accommodation.infrastructure.address.JpaCategoryRepository;
+import com.project.jagoga.category.infrastructure.JpaCategoryRepository;
 import com.project.jagoga.accommodation.infrastructure.address.JpaCityRepository;
 import com.project.jagoga.accommodation.infrastructure.address.JpaStateRepository;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
