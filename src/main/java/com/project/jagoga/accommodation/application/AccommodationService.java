@@ -1,32 +1,27 @@
 package com.project.jagoga.accommodation.application;
 
+import com.project.jagoga.accommodation.domain.Accommodation;
+import com.project.jagoga.accommodation.domain.AccommodationRepository;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
 import com.project.jagoga.exception.accommodation.DuplicatedAccommodationException;
 import com.project.jagoga.exception.accommodation.NotExistAccommodationException;
-import com.project.jagoga.accommodation.domain.Accommodation;
-import com.project.jagoga.accommodation.domain.AccommodationRepository;
 import com.project.jagoga.user.domain.AuthUser;
-import com.project.jagoga.user.domain.User;
-import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.utils.VerificationUtils;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class AccommodationService {
 
-    private final UserRepository userRepository;
     private final AccommodationRepository accommodationRepository;
 
     public Accommodation saveAccommodation(AccommodationRequestDto accommodationRequestDto, AuthUser loginUser) {
-        User owner = userRepository.findById(loginUser.getId()).get();
-        VerificationUtils.verifyOwnerPermission(loginUser, owner.getId());
-        Accommodation accommodation = accommodationRequestDto.toEntity(owner);
+        VerificationUtils.verifyOwnerPermission(loginUser, loginUser.getId());
+        Accommodation accommodation = accommodationRequestDto.toEntity(loginUser.getId());
         validateDuplicatedAccommodation(accommodation);
         return accommodationRepository.save(accommodation);
     }
