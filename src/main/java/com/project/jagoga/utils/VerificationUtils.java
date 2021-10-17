@@ -9,6 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VerificationUtils {
 
+    public static void verifyAdminPermission(AuthUser loginUser) {
+        if (loginUser.getRole() != Role.ADMIN) {
+            throw new ForbiddenException();
+        }
+    }
+
     public static void verifyOwnerPermission(AuthUser loginUser, long userId) {
         if ((loginUser.getRole() != Role.ADMIN)
             && (loginUser.getRole() != Role.OWNER || !loginUser.getId().equals(userId))) {
