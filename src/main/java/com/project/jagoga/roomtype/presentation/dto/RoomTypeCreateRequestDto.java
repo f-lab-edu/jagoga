@@ -21,7 +21,7 @@ public class RoomTypeCreateRequestDto {
     @Positive(message = "가격은 0원 이상이어야 합니다.")
     private int price;
 
-    public RoomType toEntity(long accommodationId) {
-        return RoomType.createInstance(accommodationId, name, description, price);
+    public RoomType toEntity(long accommodationId, long ownerId) {
+        return RoomType.createInstance(accommodationId, name, description, price, ownerId);
     }
 }
