@@ -19,12 +19,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class RoomInventoryAddRequestDto implements InventoryValidPeriod {
 
     @NotNull(message = "기간 시작 일자가 명시되어야 합니다.")
-    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
     @NotNull(message = "기간 종료 일자가 명시되어야 합니다.")
-    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
