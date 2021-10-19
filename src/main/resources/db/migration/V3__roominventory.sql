@@ -1,7 +1,7 @@
 create table room_inventory (
     roominventory_id bigint AUTO_INCREMENT not null,
     roomtype_id bigint not null,
-    inventory_date datetime(6),
+    inventory_date date,
     available_count int,
     created_at datetime(6),
     modified_at datetime(6),
