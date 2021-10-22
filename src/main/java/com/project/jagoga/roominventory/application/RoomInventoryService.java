@@ -2,6 +2,7 @@ package com.project.jagoga.roominventory.application;
 
 import com.project.jagoga.roominventory.domain.RoomInventory;
 import com.project.jagoga.roominventory.domain.RoomInventoryRepository;
+import com.project.jagoga.roominventory.infrastructure.JdbcRoomInventoryRepository;
 import com.project.jagoga.roominventory.presentation.dto.RoomInventoryAddRequestDto;
 import com.project.jagoga.roomtype.application.RoomTypeService;
 import com.project.jagoga.roomtype.domain.RoomType;
@@ -9,6 +10,7 @@ import com.project.jagoga.user.domain.AuthUser;
 import com.project.jagoga.utils.VerificationUtils;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,6 +25,7 @@ public class RoomInventoryService {
 
     private final RoomTypeService roomTypeService;
     private final RoomInventoryRepository roomInventoryRepository;
+    private final JdbcRoomInventoryRepository jdbcRoomInventoryRepository;
 
     public void addInventory(
         long roomTypeId, RoomInventoryAddRequestDto roomInventoryAddRequestDto, AuthUser loginUser
@@ -38,10 +41,12 @@ public class RoomInventoryService {
             .limit(ChronoUnit.DAYS.between(startDate, endDate.plusDays(1)))
             .collect(Collectors.toList());
 
+        List<RoomInventory> roomInventoryList = new ArrayList<>();
         dates.forEach(date -> {
             RoomInventory instance =
                 RoomInventory.createInstance(roomType, date, roomInventoryAddRequestDto.getAvailableCount());
-            roomInventoryRepository.save(instance);
+            roomInventoryList.add(instance);
         });
+        jdbcRoomInventoryRepository.batchInsertRoomInventories(roomInventoryList);
     }
 }

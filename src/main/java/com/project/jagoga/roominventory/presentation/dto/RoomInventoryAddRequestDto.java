@@ -35,7 +35,7 @@ public class RoomInventoryAddRequestDto implements InventoryValidPeriod {
             return false;
         }
 
-        return endDate.isBefore(startDate.plusMonths(1))
+        return endDate.isBefore(startDate.plusMonths(3))
             && (endDate.isEqual(startDate) || endDate.isAfter(startDate));
     }
 }
