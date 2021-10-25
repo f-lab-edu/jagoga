@@ -24,14 +24,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomInventoryService {
 
     private final RoomTypeService roomTypeService;
-    private final RoomInventoryRepository roomInventoryRepository;
     private final JdbcRoomInventoryRepository jdbcRoomInventoryRepository;
 
     public void addInventory(
         long roomTypeId, RoomInventoryAddRequestDto roomInventoryAddRequestDto, AuthUser loginUser
     ) {
-        RoomType roomType =
-            roomTypeService.getRoomTypeById(roomTypeId);
+        RoomType roomType = roomTypeService.getRoomTypeById(roomTypeId);
         VerificationUtils.verifyOwnerPermission(loginUser, roomType.getOwnerId());
 
         LocalDate startDate = roomInventoryAddRequestDto.getStartDate();
@@ -48,5 +46,16 @@ public class RoomInventoryService {
             roomInventoryList.add(instance);
         });
         jdbcRoomInventoryRepository.batchInsertRoomInventories(roomInventoryList);
+    }
+
+    public boolean isAvailableBooking(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate)  {
+        long days = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+        List<Long> rows = jdbcRoomInventoryRepository.rowsFromCheckInToCheckOut(roomTypeId, checkInDate, checkOutDate);
+
+        return (days + 1 == rows.size());
+    }
+
+    public void reduceInventory(List<RoomInventory> roomInventories) {
+        jdbcRoomInventoryRepository.batchReduceRoomInventories(roomInventories);
     }
 }
