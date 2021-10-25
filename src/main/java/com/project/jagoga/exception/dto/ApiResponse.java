@@ -1,5 +1,6 @@
 package com.project.jagoga.exception.dto;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.validation.FieldError;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.validation.ObjectError;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,7 +34,15 @@ public class ApiResponse<T> {
     // Hibernate Validator에 의해 유효하지 않은 데이터로 인해 API 호출이 거부될때 반환
     public static ApiResponse<?> createFail(BindingResult bindingResult) {
         Map<String, String> errors = new HashMap<>();
-        bindingResult.getAllErrors().forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
+
+        List<ObjectError> allErrors = bindingResult.getAllErrors();
+        for (ObjectError error : allErrors) {
+            if (error instanceof FieldError) {
+                errors.put(((FieldError) error).getField(), error.getDefaultMessage());
+            } else {
+                errors.put( error.getObjectName(), error.getDefaultMessage());
+            }
+        }
         return new ApiResponse<>(FAIL_STATUS, errors, null);
     }
 

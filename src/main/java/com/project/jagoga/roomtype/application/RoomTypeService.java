@@ -26,7 +26,7 @@ public class RoomTypeService {
         Accommodation accommodation =
             accommodationService.getAccommodationById(accommodationId);
         VerificationUtils.verifyOwnerPermission(loginUser, accommodation.getOwnerId());
-        RoomType roomType = roomTypeCreateRequestDto.toEntity(accommodationId);
+        RoomType roomType = roomTypeCreateRequestDto.toEntity(accommodationId, loginUser.getId());
         return roomTypeRepository.save(roomType);
     }
 
