@@ -1,20 +1,17 @@
 package com.project.jagoga.accommodation.domain;
 
-import com.project.jagoga.accommodation.domain.address.City;
-
 import com.project.jagoga.utils.BaseTimeEntity;
-import javax.persistence.GenerationType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -55,16 +52,16 @@ public class Accommodation extends BaseTimeEntity {
     }
 
     public Accommodation update(String accommodationName, String phoneNumber,
-                       long cityId, AccommodationType accommodationType,
-                       String description, String information) {
+                                long cityId, AccommodationType accommodationType,
+                                String description, String information) {
         return Accommodation.builder()
-                .id(this.getId())
-                .accommodationName(accommodationName)
-                .phoneNumber(phoneNumber)
-                .cityId(cityId)
-                .accommodationType(accommodationType)
-                .description(description)
-                .information(information)
-                .build();
+            .id(this.getId())
+            .accommodationName(accommodationName)
+            .phoneNumber(phoneNumber)
+            .cityId(cityId)
+            .accommodationType(accommodationType)
+            .description(description)
+            .information(information)
+            .build();
     }
 }
