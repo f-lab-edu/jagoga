@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -22,6 +23,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final RoomInventoryService roomInventoryService;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Booking bookProduct(long roomTypeId, BookingRequestDto bookingRequestDto, AuthUser loginUser) {
         LocalDate checkInDate = bookingRequestDto.getCheckInDate();
         LocalDate checkOutDate = bookingRequestDto.getCheckOutDate();
