@@ -42,33 +42,8 @@ public class JdbcRoomInventoryRepository {
         });
     }
 
-    public int countRowsFromCheckInToCheckOut(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate) {
-        String sql = "SELECT COUNT(roominventory_id) from room_inventory where roomtype_id = " + roomTypeId
-            + " and inventory_date >= " + checkInDate + " and inventory_date <= " + checkOutDate
-            + " and available_count > 0";
-
-        Integer result = jdbcTemplate.queryForObject(sql, Integer.class);
-        return (result != null ? result : 0);
-    }
-
-    public List<Long> rowsFromCheckInToCheckOut(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate) {
-        String sql = "SELECT roominventory_id from room_inventory where roomtype_id = " + roomTypeId
-            + " and inventory_date >= '" + checkInDate + "' and inventory_date <= '" + checkOutDate
-            + "' and available_count > 0";
-
-        List<Long> result = jdbcTemplate.query(sql,
-            new RowMapper<>() {
-
-                @Override
-                public Long mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    return rs.getLong("roominventory_id");
-                }
-            });
-        return result;
-    }
-
     public void batchReduceRoomInventories(List<RoomInventory> roomInventories) {
-        String sql = "UPDATE room_inventory SET available_count = ?";
+        String sql = "UPDATE room_inventory SET available_count = ? WHERE roominventory_id = ?";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 

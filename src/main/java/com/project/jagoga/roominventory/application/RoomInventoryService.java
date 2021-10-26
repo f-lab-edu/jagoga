@@ -25,6 +25,7 @@ public class RoomInventoryService {
 
     private final RoomTypeService roomTypeService;
     private final JdbcRoomInventoryRepository jdbcRoomInventoryRepository;
+    private final RoomInventoryRepository roomInventoryRepository;
 
     public void addInventory(
         long roomTypeId, RoomInventoryAddRequestDto roomInventoryAddRequestDto, AuthUser loginUser
@@ -48,14 +49,11 @@ public class RoomInventoryService {
         jdbcRoomInventoryRepository.batchInsertRoomInventories(roomInventoryList);
     }
 
-    public boolean isAvailableBooking(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate)  {
-        long days = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
-        List<Long> rows = jdbcRoomInventoryRepository.rowsFromCheckInToCheckOut(roomTypeId, checkInDate, checkOutDate);
-
-        return (days + 1 == rows.size());
-    }
-
     public void reduceInventory(List<RoomInventory> roomInventories) {
         jdbcRoomInventoryRepository.batchReduceRoomInventories(roomInventories);
+    }
+
+    public List<RoomInventory> getInventories(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate) {
+        return roomInventoryRepository.findByRoomTypeIdAndInventoryDateBetween(roomTypeId, checkInDate, checkOutDate);
     }
 }

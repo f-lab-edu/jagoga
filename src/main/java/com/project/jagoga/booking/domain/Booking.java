@@ -27,9 +27,7 @@ public class Booking extends BaseTimeEntity {
 
     @Column(name = "roomtype_id")
     private long roomTypeId;
-    
     private LocalDate checkInDate;
-
     private LocalDate checkOutDate;
 
     @Enumerated(EnumType.STRING)

@@ -5,8 +5,11 @@ import com.project.jagoga.booking.domain.BookingRepository;
 import com.project.jagoga.booking.presentation.dto.BookingRequestDto;
 import com.project.jagoga.exception.booking.NonBookableException;
 import com.project.jagoga.roominventory.application.RoomInventoryService;
+import com.project.jagoga.roominventory.domain.RoomInventory;
 import com.project.jagoga.user.domain.AuthUser;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +26,22 @@ public class BookingService {
         LocalDate checkInDate = bookingRequestDto.getCheckInDate();
         LocalDate checkOutDate = bookingRequestDto.getCheckOutDate();
 
-        if (!roomInventoryService.isAvailableBooking(roomTypeId, checkInDate, checkOutDate)) {
+        List<RoomInventory> roomInventories =
+            roomInventoryService.getInventories(roomTypeId, checkInDate, checkOutDate);
+
+        if (!isAvailableBooking(roomInventories, checkInDate, checkOutDate)) {
             throw new NonBookableException();
         }
+        roomInventoryService.reduceInventory(roomInventories);
 
         Booking booking = bookingRequestDto.toEntity(loginUser.getId(), roomTypeId);
-        // TODO : Inventory 줄이기
         return bookingRepository.save(booking);
+    }
+
+    public boolean isAvailableBooking(
+        List<RoomInventory> roomInventories, LocalDate checkInDate, LocalDate checkOutDate)  {
+        long days = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+        long count = roomInventories.stream().filter(RoomInventory::hasAvailableRoom).count();
+        return (days + 1 == count);
     }
 }
