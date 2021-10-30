@@ -1,5 +1,6 @@
 package com.project.jagoga.roominventory.infrastructure;
 
+import com.project.jagoga.exception.booking.NonBookableException;
 import com.project.jagoga.roominventory.domain.RoomInventory;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -18,7 +19,8 @@ public class JdbcRoomInventoryRepository {
 
     public void batchInsertRoomInventories(List<RoomInventory> roomInventories) {
         String sql = "INSERT INTO room_inventory "
-            + "(roomtype_id, inventory_date, available_count, created_at, modified_at) VALUES (?, ?, ?, ?, ?)";
+            + "(roomtype_id, inventory_date, available_count, created_at, modified_at) "
+            + "VALUES (?, ?, ?, ?, ?)";
 
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
@@ -40,14 +42,15 @@ public class JdbcRoomInventoryRepository {
     }
 
     public void batchReduceRoomInventories(List<RoomInventory> roomInventories) {
-        String sql = "UPDATE room_inventory SET available_count = ? WHERE roominventory_id = ?";
+        String sql = "UPDATE room_inventory SET available_count = available_count - 1"
+            + " WHERE roominventory_id = ? and available_count = ?";
 
-        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        int[] rowsAffectedArray = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int index) throws SQLException {
-                ps.setInt(1, roomInventories.get(index).getAvailableCount() - 1);
-                ps.setLong(2, roomInventories.get(index).getId());
+                ps.setLong(1, roomInventories.get(index).getId());
+                ps.setInt(2, roomInventories.get(index).getAvailableCount());
             }
 
             @Override
@@ -55,5 +58,9 @@ public class JdbcRoomInventoryRepository {
                 return roomInventories.size();
             }
         });
+
+        if (rowsAffectedArray.length != roomInventories.size()) {
+            throw new NonBookableException();
+        }
     }
 }
