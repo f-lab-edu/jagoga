@@ -23,7 +23,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final RoomInventoryService roomInventoryService;
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     public Booking bookProduct(long roomTypeId, BookingRequestDto bookingRequestDto, AuthUser loginUser) {
         LocalDate checkInDate = bookingRequestDto.getCheckInDate();
         LocalDate checkOutDate = bookingRequestDto.getCheckOutDate();
