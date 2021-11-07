@@ -48,14 +48,13 @@ public class JdbcRoomInventoryRepository {
 
     public void batchReduceRoomInventories(List<RoomInventory> roomInventories) {
         String sql = "UPDATE room_inventory SET available_count = available_count - 1"
-            + " WHERE roominventory_id = ? and available_count = ?";
+            + " WHERE roominventory_id = ?";
 
         int[] rowsAffectedArray = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int index) throws SQLException {
                 ps.setLong(1, roomInventories.get(index).getId());
-                ps.setInt(2, roomInventories.get(index).getAvailableCount());
             }
 
             @Override
@@ -70,7 +69,8 @@ public class JdbcRoomInventoryRepository {
     }
 
     public List<RoomInventory> batchSelectRoomInventories(long roomTypeId, LocalDate startDate, LocalDate endDate) {
-        String sql = "SELECT * FROM ROOM_INVENTORY WHERE inventory_date >= ? AND inventory_date <= ?";
+        String sql = "SELECT * FROM ROOM_INVENTORY WHERE roomtype_id = ? FOR UPDATE";
+
         return jdbcTemplate.query(sql, new RowMapper<RoomInventory>() {
 
             @Override
@@ -83,7 +83,7 @@ public class JdbcRoomInventoryRepository {
                 );
                 return roomInventory;
             }
-        }, startDate, endDate);
+        }, roomTypeId);
     }
 
     public void batchChangeRoomInventories(List<RoomInventory> roomInventories, int count) {

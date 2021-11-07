@@ -30,7 +30,6 @@ public class RoomInventoryService {
 
     private final RoomTypeService roomTypeService;
     private final JdbcRoomInventoryRepository jdbcRoomInventoryRepository;
-    private final RoomInventoryRepository roomInventoryRepository;
 
     public void addInventory(
         long roomTypeId, RoomInventoryAddRequestDto roomInventoryAddRequestDto, AuthUser loginUser

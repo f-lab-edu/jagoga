@@ -10,9 +10,9 @@ import com.project.jagoga.user.domain.AuthUser;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -28,8 +28,13 @@ public class BookingService {
         LocalDate checkInDate = bookingRequestDto.getCheckInDate();
         LocalDate checkOutDate = bookingRequestDto.getCheckOutDate();
 
-        List<RoomInventory> roomInventories =
-            roomInventoryService.getInventories(roomTypeId, checkInDate, checkOutDate);
+        List<RoomInventory> allRoomInventories =
+            roomInventoryService.getInventories(roomTypeId, checkInDate, checkOutDate); // TODO
+
+        List<RoomInventory> roomInventories = allRoomInventories.stream()
+            .filter(i -> i.getInventoryDate().isAfter(checkInDate.minusDays(1))
+                && i.getInventoryDate().isBefore(checkOutDate.plusDays(1)))
+            .collect(Collectors.toList());
 
         if (!isAvailableBooking(roomInventories, checkInDate, checkOutDate)) {
             throw new NonBookableException();
@@ -41,9 +46,9 @@ public class BookingService {
     }
 
     public boolean isAvailableBooking(
-        List<RoomInventory> roomInventories, LocalDate checkInDate, LocalDate checkOutDate)  {
-        long days = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+        List<RoomInventory> roomInventories, LocalDate checkInDate, LocalDate checkOutDate) {
+        long days = ChronoUnit.DAYS.between(checkInDate, checkOutDate) + 1;
         long count = roomInventories.stream().filter(RoomInventory::hasAvailableRoom).count();
-        return (days + 1 == count);
+        return days == count;
     }
 }
