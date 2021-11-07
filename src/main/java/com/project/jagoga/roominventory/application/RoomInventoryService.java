@@ -64,7 +64,7 @@ public class RoomInventoryService {
     }
 
     public List<RoomInventory> getInventories(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate) {
-        return roomInventoryRepository.findByRoomTypeIdAndInventoryDateBetween(roomTypeId, checkInDate, checkOutDate);
+        return jdbcRoomInventoryRepository.batchSelectRoomInventories(roomTypeId, checkInDate, checkOutDate);
     }
 
     public void changeStock(

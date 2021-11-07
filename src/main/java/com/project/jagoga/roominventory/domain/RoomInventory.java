@@ -25,6 +25,7 @@ public class RoomInventory extends BaseTimeEntity {
     @Column(name = "roominventory_id")
     private Long id;
 
+    @Column(name = "roomtype_id")
     private long roomTypeId;
 
     private LocalDate inventoryDate;
