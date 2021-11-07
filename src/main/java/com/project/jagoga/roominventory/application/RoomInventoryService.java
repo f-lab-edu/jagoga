@@ -62,8 +62,8 @@ public class RoomInventoryService {
         jdbcRoomInventoryRepository.batchReduceRoomInventories(roomInventories);
     }
 
-    public List<RoomInventory> getInventories(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate) {
-        return jdbcRoomInventoryRepository.batchSelectRoomInventories(roomTypeId, checkInDate, checkOutDate);
+    public List<RoomInventory> getInventories(long roomTypeId) {
+        return jdbcRoomInventoryRepository.batchSelectRoomInventories(roomTypeId);
     }
 
     public void changeStock(
@@ -76,8 +76,13 @@ public class RoomInventoryService {
         LocalDate endDate = roomInventoryUpdateRequestDto.getEndDate();
         int count = roomInventoryUpdateRequestDto.getCount();
 
-        List<RoomInventory> roomInventories =
-            jdbcRoomInventoryRepository.batchSelectRoomInventories(roomTypeId, startDate, endDate);
+        List<RoomInventory> allRoomInventories = getInventories(roomTypeId);
+
+        List<RoomInventory> roomInventories = allRoomInventories.stream()
+            .filter(i -> i.getInventoryDate().isAfter(startDate.minusDays(1))
+                && i.getInventoryDate().isBefore(endDate.plusDays(1)))
+            .collect(Collectors.toList());
+
         if (roomInventories.size() != ChronoUnit.DAYS.between(startDate, endDate) + 1) {
             throw new NotExistInventoryException();
         }

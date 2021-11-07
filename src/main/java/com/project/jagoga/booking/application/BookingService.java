@@ -29,7 +29,7 @@ public class BookingService {
         LocalDate checkOutDate = bookingRequestDto.getCheckOutDate();
 
         List<RoomInventory> allRoomInventories =
-            roomInventoryService.getInventories(roomTypeId, checkInDate, checkOutDate); // TODO
+            roomInventoryService.getInventories(roomTypeId);
 
         List<RoomInventory> roomInventories = allRoomInventories.stream()
             .filter(i -> i.getInventoryDate().isAfter(checkInDate.minusDays(1))

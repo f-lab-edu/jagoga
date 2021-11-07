@@ -68,7 +68,7 @@ public class JdbcRoomInventoryRepository {
         }
     }
 
-    public List<RoomInventory> batchSelectRoomInventories(long roomTypeId, LocalDate startDate, LocalDate endDate) {
+    public List<RoomInventory> batchSelectRoomInventories(long roomTypeId) {
         String sql = "SELECT * FROM ROOM_INVENTORY WHERE roomtype_id = ? FOR UPDATE";
 
         return jdbcTemplate.query(sql, new RowMapper<RoomInventory>() {
