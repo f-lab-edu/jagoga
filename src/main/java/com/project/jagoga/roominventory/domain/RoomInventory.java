@@ -36,10 +36,6 @@ public class RoomInventory extends BaseTimeEntity {
         return availableCount > 0;
     }
 
-    public void book() {
-        this.availableCount -= 1;
-    }
-
     public static RoomInventory createInstance(
         long roomTypeId, LocalDate inventoryDate, int availableCount
     ) {

@@ -3,8 +3,8 @@ package com.project.jagoga.roominventory.application;
 import com.project.jagoga.exception.roominventory.DuplicatedInventoryException;
 import com.project.jagoga.exception.roominventory.InventoryCountNegativeConstraintException;
 import com.project.jagoga.exception.roominventory.NotExistInventoryException;
+import com.project.jagoga.roominventory.domain.RoomInventories;
 import com.project.jagoga.roominventory.domain.RoomInventory;
-import com.project.jagoga.roominventory.domain.RoomInventoryRepository;
 import com.project.jagoga.roominventory.infrastructure.JdbcRoomInventoryRepository;
 import com.project.jagoga.roominventory.presentation.dto.RoomInventoryAddRequestDto;
 import com.project.jagoga.roominventory.presentation.dto.RoomInventoryUpdateRequestDto;
@@ -76,16 +76,13 @@ public class RoomInventoryService {
         LocalDate endDate = roomInventoryUpdateRequestDto.getEndDate();
         int count = roomInventoryUpdateRequestDto.getCount();
 
-        List<RoomInventory> allRoomInventories = getInventories(roomTypeId);
+        RoomInventories allRoomInventories = RoomInventories.createInstance(getInventories(roomTypeId));
 
-        List<RoomInventory> roomInventories = allRoomInventories.stream()
-            .filter(i -> i.getInventoryDate().isAfter(startDate.minusDays(1))
-                && i.getInventoryDate().isBefore(endDate.plusDays(1)))
-            .collect(Collectors.toList());
-
-        if (roomInventories.size() != ChronoUnit.DAYS.between(startDate, endDate) + 1) {
+        if (!allRoomInventories.isAvailableChangeable(startDate, endDate)) {
             throw new NotExistInventoryException();
         }
+
+        List<RoomInventory> roomInventories = allRoomInventories.getRoomInventories(startDate, endDate);
 
         roomInventories.forEach(inventory -> {
             if (inventory.getAvailableCount() + count < 0) {

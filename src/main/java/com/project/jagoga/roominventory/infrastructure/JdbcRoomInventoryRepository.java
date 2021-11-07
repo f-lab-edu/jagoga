@@ -5,7 +5,6 @@ import com.project.jagoga.roominventory.domain.RoomInventory;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -87,16 +86,14 @@ public class JdbcRoomInventoryRepository {
     }
 
     public void batchChangeRoomInventories(List<RoomInventory> roomInventories, int count) {
-        String sql = "UPDATE room_inventory SET available_count = available_count + ?"
-            + " WHERE roominventory_id = ? and available_count = ?";
+        String sql = "UPDATE room_inventory SET available_count = available_count + ? WHERE roominventory_id = ?";
 
-        int[] rowsAffectedArray = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int index) throws SQLException {
                 ps.setInt(1, count);
                 ps.setLong(2, roomInventories.get(index).getId());
-                ps.setInt(3, count);
             }
 
             @Override

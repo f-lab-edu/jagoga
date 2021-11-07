@@ -5,12 +5,11 @@ import com.project.jagoga.booking.domain.BookingRepository;
 import com.project.jagoga.booking.presentation.dto.BookingRequestDto;
 import com.project.jagoga.exception.booking.NonBookableException;
 import com.project.jagoga.roominventory.application.RoomInventoryService;
+import com.project.jagoga.roominventory.domain.RoomInventories;
 import com.project.jagoga.roominventory.domain.RoomInventory;
 import com.project.jagoga.user.domain.AuthUser;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,24 +30,15 @@ public class BookingService {
         List<RoomInventory> allRoomInventories =
             roomInventoryService.getInventories(roomTypeId);
 
-        List<RoomInventory> roomInventories = allRoomInventories.stream()
-            .filter(i -> i.getInventoryDate().isAfter(checkInDate.minusDays(1))
-                && i.getInventoryDate().isBefore(checkOutDate.plusDays(1)))
-            .collect(Collectors.toList());
+        RoomInventories roomInventories = RoomInventories
+            .createInstance(allRoomInventories);
 
-        if (!isAvailableBooking(roomInventories, checkInDate, checkOutDate)) {
+        if (!roomInventories.isAvailableBooking(checkInDate, checkOutDate)) {
             throw new NonBookableException();
         }
-        roomInventoryService.reduceInventory(roomInventories);
+        roomInventoryService.reduceInventory(roomInventories.getRoomInventories(checkInDate, checkOutDate));
 
         Booking booking = bookingRequestDto.toEntity(loginUser.getId(), roomTypeId);
         return bookingRepository.save(booking);
-    }
-
-    public boolean isAvailableBooking(
-        List<RoomInventory> roomInventories, LocalDate checkInDate, LocalDate checkOutDate) {
-        long days = ChronoUnit.DAYS.between(checkInDate, checkOutDate) + 1;
-        long count = roomInventories.stream().filter(RoomInventory::hasAvailableRoom).count();
-        return days == count;
     }
 }
