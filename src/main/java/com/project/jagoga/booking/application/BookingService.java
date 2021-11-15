@@ -7,7 +7,6 @@ import com.project.jagoga.booking.presentation.dto.BookingRequestDto;
 import com.project.jagoga.exception.booking.NonBookableException;
 import com.project.jagoga.roominventory.application.RoomInventoryService;
 import com.project.jagoga.roominventory.domain.RoomInventories;
-import com.project.jagoga.roomtype.application.RoomTypeService;
 import com.project.jagoga.user.domain.AuthUser;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
