@@ -67,24 +67,6 @@ public class JdbcRoomInventoryRepository {
         }
     }
 
-    public List<RoomInventory> batchSelectRoomInventories(long roomTypeId) {
-        String sql = "SELECT * FROM ROOM_INVENTORY WHERE roomtype_id = ? FOR UPDATE";
-
-        return jdbcTemplate.query(sql, new RowMapper<RoomInventory>() {
-
-            @Override
-            public RoomInventory mapRow(ResultSet rs, int rowNum) throws SQLException {
-                RoomInventory roomInventory = new RoomInventory(
-                    rs.getLong("roominventory_id"),
-                    roomTypeId,
-                    rs.getDate("inventory_date").toLocalDate(),
-                    rs.getInt("available_count")
-                );
-                return roomInventory;
-            }
-        }, roomTypeId);
-    }
-
     public void batchChangeRoomInventories(List<RoomInventory> roomInventories, int count) {
         String sql = "UPDATE room_inventory SET available_count = available_count + ? WHERE roominventory_id = ?";
 

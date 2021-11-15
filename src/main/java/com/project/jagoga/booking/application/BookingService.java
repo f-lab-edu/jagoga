@@ -1,15 +1,15 @@
 package com.project.jagoga.booking.application;
 
+import com.project.jagoga.aop.RoomTypeLock;
 import com.project.jagoga.booking.domain.Booking;
 import com.project.jagoga.booking.domain.BookingRepository;
 import com.project.jagoga.booking.presentation.dto.BookingRequestDto;
 import com.project.jagoga.exception.booking.NonBookableException;
 import com.project.jagoga.roominventory.application.RoomInventoryService;
 import com.project.jagoga.roominventory.domain.RoomInventories;
-import com.project.jagoga.roominventory.domain.RoomInventory;
+import com.project.jagoga.roomtype.application.RoomTypeService;
 import com.project.jagoga.user.domain.AuthUser;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@RoomTypeLock
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -27,16 +28,13 @@ public class BookingService {
         LocalDate checkInDate = bookingRequestDto.getCheckInDate();
         LocalDate checkOutDate = bookingRequestDto.getCheckOutDate();
 
-        List<RoomInventory> allRoomInventories =
-            roomInventoryService.getInventories(roomTypeId);
-
         RoomInventories roomInventories = RoomInventories
-            .createInstance(allRoomInventories);
+            .createInstance(roomInventoryService.getInventories(roomTypeId, checkInDate, checkOutDate));
 
         if (!roomInventories.isAvailableBooking(checkInDate, checkOutDate)) {
             throw new NonBookableException();
         }
-        roomInventoryService.reduceInventory(roomInventories.getRoomInventories(checkInDate, checkOutDate));
+        roomInventoryService.reduceInventory(roomTypeId, roomInventories.getRoomInventories());
 
         Booking booking = bookingRequestDto.toEntity(loginUser.getId(), roomTypeId);
         return bookingRepository.save(booking);

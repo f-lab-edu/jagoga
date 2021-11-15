@@ -1,10 +1,12 @@
 package com.project.jagoga.roominventory.application;
 
+import com.project.jagoga.aop.RoomTypeLock;
 import com.project.jagoga.exception.roominventory.DuplicatedInventoryException;
 import com.project.jagoga.exception.roominventory.InventoryCountNegativeConstraintException;
 import com.project.jagoga.exception.roominventory.NotExistInventoryException;
 import com.project.jagoga.roominventory.domain.RoomInventories;
 import com.project.jagoga.roominventory.domain.RoomInventory;
+import com.project.jagoga.roominventory.domain.RoomInventoryRepository;
 import com.project.jagoga.roominventory.infrastructure.JdbcRoomInventoryRepository;
 import com.project.jagoga.roominventory.presentation.dto.RoomInventoryAddRequestDto;
 import com.project.jagoga.roominventory.presentation.dto.RoomInventoryUpdateRequestDto;
@@ -26,9 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@RoomTypeLock
 public class RoomInventoryService {
 
     private final RoomTypeService roomTypeService;
+    private final RoomInventoryRepository roomInventoryRepository;
     private final JdbcRoomInventoryRepository jdbcRoomInventoryRepository;
 
     public void addInventory(
@@ -58,12 +62,12 @@ public class RoomInventoryService {
         }
     }
 
-    public void reduceInventory(List<RoomInventory> roomInventories) {
+    public void reduceInventory(long roomTypeId, List<RoomInventory> roomInventories) {
         jdbcRoomInventoryRepository.batchReduceRoomInventories(roomInventories);
     }
 
-    public List<RoomInventory> getInventories(long roomTypeId) {
-        return jdbcRoomInventoryRepository.batchSelectRoomInventories(roomTypeId);
+    public List<RoomInventory> getInventories(long roomTypeId, LocalDate checkInDate, LocalDate checkOutDate) {
+        return roomInventoryRepository.findByRoomTypeIdAndInventoryDateBetween(roomTypeId, checkInDate, checkOutDate);
     }
 
     public void changeStock(
@@ -76,20 +80,19 @@ public class RoomInventoryService {
         LocalDate endDate = roomInventoryUpdateRequestDto.getEndDate();
         int count = roomInventoryUpdateRequestDto.getCount();
 
-        RoomInventories allRoomInventories = RoomInventories.createInstance(getInventories(roomTypeId));
+        RoomInventories roomInventories =
+            RoomInventories.createInstance(getInventories(roomTypeId, startDate, endDate));
 
-        if (!allRoomInventories.isAvailableChangeable(startDate, endDate)) {
+        if (!roomInventories.isAvailableChangeable(startDate, endDate)) {
             throw new NotExistInventoryException();
         }
 
-        List<RoomInventory> roomInventories = allRoomInventories.getRoomInventories(startDate, endDate);
-
-        roomInventories.forEach(inventory -> {
+        roomInventories.getRoomInventories().forEach(inventory -> {
             if (inventory.getAvailableCount() + count < 0) {
                 throw new InventoryCountNegativeConstraintException();
             }
         });
 
-        jdbcRoomInventoryRepository.batchChangeRoomInventories(roomInventories, count);
+        jdbcRoomInventoryRepository.batchChangeRoomInventories(roomInventories.getRoomInventories(), count);
     }
 }
