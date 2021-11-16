@@ -1,23 +1,22 @@
 package com.project.jagoga.booking.application;
 
+import com.project.jagoga.aop.RoomTypeLock;
 import com.project.jagoga.booking.domain.Booking;
 import com.project.jagoga.booking.domain.BookingRepository;
 import com.project.jagoga.booking.presentation.dto.BookingRequestDto;
 import com.project.jagoga.exception.booking.NonBookableException;
 import com.project.jagoga.roominventory.application.RoomInventoryService;
-import com.project.jagoga.roominventory.domain.RoomInventory;
+import com.project.jagoga.roominventory.domain.RoomInventories;
 import com.project.jagoga.user.domain.AuthUser;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@RoomTypeLock
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -28,22 +27,15 @@ public class BookingService {
         LocalDate checkInDate = bookingRequestDto.getCheckInDate();
         LocalDate checkOutDate = bookingRequestDto.getCheckOutDate();
 
-        List<RoomInventory> roomInventories =
-            roomInventoryService.getInventories(roomTypeId, checkInDate, checkOutDate);
+        RoomInventories roomInventories = RoomInventories
+            .createInstance(roomInventoryService.getInventories(roomTypeId, checkInDate, checkOutDate));
 
-        if (!isAvailableBooking(roomInventories, checkInDate, checkOutDate)) {
+        if (!roomInventories.isAvailableBooking(checkInDate, checkOutDate)) {
             throw new NonBookableException();
         }
-        roomInventoryService.reduceInventory(roomInventories);
+        roomInventoryService.reduceInventory(roomTypeId, roomInventories.getRoomInventories());
 
         Booking booking = bookingRequestDto.toEntity(loginUser.getId(), roomTypeId);
         return bookingRepository.save(booking);
-    }
-
-    public boolean isAvailableBooking(
-        List<RoomInventory> roomInventories, LocalDate checkInDate, LocalDate checkOutDate)  {
-        long days = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
-        long count = roomInventories.stream().filter(RoomInventory::hasAvailableRoom).count();
-        return (days + 1 == count);
     }
 }

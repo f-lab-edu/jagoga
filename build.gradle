@@ -30,6 +30,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java'
 	runtimeOnly 'com.h2database:h2'
 	implementation 'org.flywaydb:flyway-core:7.15.0'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 test {
